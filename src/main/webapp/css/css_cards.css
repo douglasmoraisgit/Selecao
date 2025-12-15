@@ -1,0 +1,330 @@
+/**
+ * cards.css
+ * Estilos de cards (categorias, produtos, etc)
+ */
+
+/* ========================================
+   🃏 CATEGORY CARD
+   ======================================== */
+.category-card {
+    background: rgba(255, 255, 255, 0.95);
+    border-radius: var(--radius-lg);
+    padding: var(--spacing-8);
+    cursor: pointer;
+    transition: all var(--transition-base);
+    box-shadow: var(--shadow-md);
+    backdrop-filter: blur(10px);
+    border: 2px solid transparent;
+    position: relative;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    min-height: 220px;
+}
+
+.category-card::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 4px;
+    background: var(--gradient-primary);
+    transform: scaleX(0);
+    transition: transform var(--transition-base);
+}
+
+.category-card:hover {
+    transform: translateY(-10px);
+    box-shadow: var(--shadow-xl);
+    border-color: var(--primary-color);
+}
+
+.category-card:hover::before {
+    transform: scaleX(1);
+}
+
+.category-card:active {
+    transform: translateY(-5px);
+}
+
+/* ========================================
+   🎯 CARD CONTENT
+   ======================================== */
+.category-card__icon {
+    font-size: 3.5rem;
+    margin-bottom: var(--spacing-4);
+    transition: transform var(--transition-base);
+}
+
+.category-card:hover .category-card__icon {
+    transform: scale(1.1) rotate(5deg);
+}
+
+.category-card__title {
+    font-size: var(--font-size-xl);
+    font-weight: var(--font-weight-semibold);
+    color: var(--text-primary);
+    margin-bottom: var(--spacing-3);
+    line-height: var(--line-height-tight);
+}
+
+.category-card__description {
+    font-size: var(--font-size-sm);
+    color: var(--text-secondary);
+    line-height: var(--line-height-relaxed);
+    flex: 1;
+}
+
+/* ========================================
+   ✅ CARD COM CHECKBOX
+   ======================================== */
+.category-card--selectable {
+    padding-right: var(--spacing-10);
+}
+
+.category-card__checkbox {
+    position: absolute;
+    top: var(--spacing-4);
+    right: var(--spacing-4);
+    width: 24px;
+    height: 24px;
+    cursor: pointer;
+    accent-color: var(--primary-color);
+    transition: transform var(--transition-base);
+}
+
+.category-card__checkbox:checked {
+    transform: scale(1.2);
+}
+
+/* Card selecionado */
+.category-card--selected {
+    border-color: var(--primary-color);
+    background: rgba(102, 126, 234, 0.1);
+}
+
+.category-card--selected::before {
+    transform: scaleX(1);
+}
+
+/* ========================================
+   📊 CARD ESTATÍSTICAS
+   ======================================== */
+.category-card__stats {
+    display: flex;
+    gap: var(--spacing-4);
+    margin-top: var(--spacing-4);
+    padding-top: var(--spacing-4);
+    border-top: 1px solid var(--bg-tertiary);
+    width: 100%;
+    justify-content: center;
+}
+
+.category-card__stat {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: var(--spacing-1);
+}
+
+.category-card__stat-value {
+    font-size: var(--font-size-lg);
+    font-weight: var(--font-weight-bold);
+    color: var(--primary-color);
+}
+
+.category-card__stat-label {
+    font-size: var(--font-size-xs);
+    color: var(--text-tertiary);
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+/* ========================================
+   🎨 VARIAÇÕES DO CARD
+   ======================================== */
+
+/* Card compacto */
+.category-card--compact {
+    padding: var(--spacing-5);
+    min-height: 150px;
+}
+
+.category-card--compact .category-card__icon {
+    font-size: 2.5rem;
+    margin-bottom: var(--spacing-3);
+}
+
+.category-card--compact .category-card__title {
+    font-size: var(--font-size-lg);
+}
+
+/* Card grande */
+.category-card--large {
+    padding: var(--spacing-10);
+    min-height: 280px;
+}
+
+.category-card--large .category-card__icon {
+    font-size: 4.5rem;
+}
+
+/* Card horizontal */
+.category-card--horizontal {
+    flex-direction: row;
+    text-align: left;
+    gap: var(--spacing-5);
+    padding: var(--spacing-6);
+    min-height: auto;
+}
+
+.category-card--horizontal .category-card__icon {
+    font-size: 2.5rem;
+    margin-bottom: 0;
+}
+
+.category-card--horizontal .category-card__content {
+    flex: 1;
+}
+
+/* ========================================
+   🎯 CARD STATES
+   ======================================== */
+
+/* Desabilitado */
+.category-card--disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+    pointer-events: none;
+}
+
+/* Loading */
+.category-card--loading {
+    position: relative;
+    pointer-events: none;
+}
+
+.category-card--loading::after {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 40px;
+    height: 40px;
+    margin: -20px 0 0 -20px;
+    border: 3px solid var(--bg-tertiary);
+    border-top-color: var(--primary-color);
+    border-radius: 50%;
+    animation: spin 0.8s linear infinite;
+}
+
+/* Destacado */
+.category-card--highlighted {
+    border-color: var(--warning-color);
+    box-shadow: 0 0 0 3px rgba(255, 152, 0, 0.2);
+}
+
+/* ========================================
+   🎨 CARD COM BADGE
+   ======================================== */
+.category-card__badge {
+    position: absolute;
+    top: var(--spacing-3);
+    left: var(--spacing-3);
+    padding: var(--spacing-1) var(--spacing-3);
+    border-radius: var(--radius-md);
+    font-size: var(--font-size-xs);
+    font-weight: var(--font-weight-semibold);
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.category-card__badge--new {
+    background: var(--success-color);
+    color: white;
+}
+
+.category-card__badge--popular {
+    background: var(--warning-color);
+    color: white;
+}
+
+.category-card__badge--premium {
+    background: var(--gradient-primary);
+    color: white;
+}
+
+/* ========================================
+   📱 RESPONSIVE
+   ======================================== */
+@media (max-width: 1024px) {
+    .category-card {
+        padding: var(--spacing-6);
+        min-height: 200px;
+    }
+    
+    .category-card__icon {
+        font-size: 3rem;
+    }
+    
+    .category-card__title {
+        font-size: var(--font-size-lg);
+    }
+}
+
+@media (max-width: 768px) {
+    .category-card {
+        padding: var(--spacing-5);
+        min-height: 180px;
+    }
+    
+    .category-card__icon {
+        font-size: 2.5rem;
+        margin-bottom: var(--spacing-3);
+    }
+    
+    .category-card__title {
+        font-size: var(--font-size-base);
+        margin-bottom: var(--spacing-2);
+    }
+    
+    .category-card__description {
+        font-size: var(--font-size-xs);
+    }
+    
+    .category-card:hover {
+        transform: translateY(-5px);
+    }
+    
+    /* Cards horizontais viram verticais no mobile */
+    .category-card--horizontal {
+        flex-direction: column;
+        text-align: center;
+    }
+    
+    .category-card--horizontal .category-card__icon {
+        margin-bottom: var(--spacing-3);
+    }
+}
+
+@media (max-width: 480px) {
+    .category-card {
+        padding: var(--spacing-4);
+        min-height: 160px;
+    }
+    
+    .category-card__icon {
+        font-size: 2rem;
+    }
+    
+    .category-card__stats {
+        gap: var(--spacing-3);
+    }
+    
+    .category-card__stat-value {
+        font-size: var(--font-size-base);
+    }
+}

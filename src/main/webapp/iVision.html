@@ -1,0 +1,1490 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Protótipo Totem - Medidas & Pré-atendimento</title>
+  <style>
+    :root{
+      --bg: #0b1220;
+      --panel: #101a2e;
+      --panel2: #0f172a;
+      --text: #e5e7eb;
+      --muted: #9ca3af;
+      --line: rgba(255,255,255,.10);
+      --brand: #22c55e;
+      --brand2: #06b6d4;
+      --warn: #f59e0b;
+      --danger: #ef4444;
+      --radius: 16px;
+      --shadow: 0 10px 30px rgba(0,0,0,.35);
+      --btnH: 52px;
+      --kioskMax: 1280px;
+      --font: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, "Apple Color Emoji","Segoe UI Emoji";
+    }
+
+    *{ box-sizing: border-box; }
+    body{
+      margin:0;
+      font-family: var(--font);
+      background: radial-gradient(1200px 800px at 20% 10%, rgba(34,197,94,.12), transparent 60%),
+                  radial-gradient(1000px 600px at 85% 20%, rgba(6,182,212,.12), transparent 60%),
+                  var(--bg);
+      color: var(--text);
+      min-height: 100vh;
+      overflow-x: hidden;
+    }
+
+    .app{
+      display: grid;
+      grid-template-columns: 360px 1fr;
+      gap: 18px;
+      padding: 18px;
+      min-height: 100vh;
+    }
+
+    .card{
+      background: linear-gradient(180deg, rgba(255,255,255,.04), rgba(255,255,255,.02));
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+    }
+
+    /* Sidebar */
+    .sidebar{
+      padding: 18px;
+      position: sticky;
+      top: 18px;
+      height: calc(100vh - 36px);
+      display: flex;
+      flex-direction: column;
+      gap: 14px;
+    }
+
+    .brandRow{
+      display:flex;
+      align-items:center;
+      justify-content: space-between;
+      gap: 12px;
+      padding: 12px;
+      background: rgba(255,255,255,.03);
+      border: 1px solid var(--line);
+      border-radius: 14px;
+    }
+    .brandLeft{ display:flex; gap: 10px; align-items:center; }
+    .logo{
+      width: 42px; height: 42px;
+      border-radius: 14px;
+      background: linear-gradient(135deg, rgba(34,197,94,.9), rgba(6,182,212,.9));
+      display:flex; align-items:center; justify-content:center;
+      font-weight: 900;
+      color: #071018;
+    }
+    .brandTitle{ line-height:1.1; }
+    .brandTitle .t1{ font-size: 14px; font-weight: 800; letter-spacing: .2px; }
+    .brandTitle .t2{ font-size: 12px; color: var(--muted); margin-top: 2px; }
+
+    .pill{
+      font-size: 12px;
+      padding: 6px 10px;
+      border-radius: 999px;
+      border: 1px solid var(--line);
+      background: rgba(255,255,255,.03);
+      color: var(--muted);
+      white-space: nowrap;
+    }
+
+    .steps{
+      padding: 14px;
+    }
+    .steps h3{
+      margin: 0 0 10px 0;
+      font-size: 14px;
+      color: var(--muted);
+      letter-spacing: .3px;
+      font-weight: 700;
+    }
+    .step{
+      display:flex;
+      align-items:flex-start;
+      gap: 10px;
+      padding: 10px 10px;
+      border-radius: 14px;
+      border: 1px solid transparent;
+      cursor: pointer;
+      user-select: none;
+    }
+    .step:hover{ background: rgba(255,255,255,.03); }
+    .step.active{
+      background: rgba(34,197,94,.10);
+      border-color: rgba(34,197,94,.25);
+    }
+    .step.done{
+      background: rgba(6,182,212,.08);
+      border-color: rgba(6,182,212,.22);
+    }
+    .dot{
+      width: 28px; height: 28px;
+      border-radius: 10px;
+      border: 1px solid var(--line);
+      background: rgba(255,255,255,.03);
+      display:flex; align-items:center; justify-content:center;
+      font-weight: 800;
+      color: var(--muted);
+      flex: 0 0 auto;
+    }
+    .step.active .dot{ color: #071018; background: rgba(34,197,94,.9); border-color: transparent; }
+    .step.done .dot{ color: #071018; background: rgba(6,182,212,.85); border-color: transparent; }
+
+    .stepText{ line-height:1.15; }
+    .stepText .s1{ font-size: 14px; font-weight: 800; }
+    .stepText .s2{ font-size: 12px; color: var(--muted); margin-top: 3px; }
+
+    .sidebarFooter{
+      margin-top: auto;
+      padding: 12px;
+      display:flex;
+      gap: 10px;
+      align-items:center;
+      justify-content: space-between;
+      background: rgba(255,255,255,.02);
+      border: 1px solid var(--line);
+      border-radius: 14px;
+    }
+    .hint{
+      font-size: 12px;
+      color: var(--muted);
+      line-height: 1.25;
+    }
+
+    /* Main */
+    .main{
+      padding: 18px;
+      display:flex;
+      flex-direction: column;
+      gap: 14px;
+      min-width: 0;
+    }
+
+    .topbar{
+      display:flex;
+      align-items:center;
+      justify-content: space-between;
+      gap: 12px;
+      padding: 14px 14px;
+      border-radius: var(--radius);
+      border: 1px solid var(--line);
+      background: rgba(255,255,255,.02);
+    }
+    .topLeft{ min-width: 0; }
+    .topLeft .h1{
+      font-size: 18px;
+      font-weight: 900;
+      margin: 0;
+      letter-spacing: .2px;
+    }
+    .topLeft .sub{
+      font-size: 12px;
+      color: var(--muted);
+      margin-top: 4px;
+    }
+    .topRight{
+      display:flex; gap: 10px; align-items:center; flex-wrap: wrap;
+      justify-content: flex-end;
+    }
+
+    .btn{
+      height: var(--btnH);
+      padding: 0 16px;
+      border-radius: 14px;
+      border: 1px solid var(--line);
+      background: rgba(255,255,255,.03);
+      color: var(--text);
+      font-weight: 800;
+      cursor:pointer;
+      display:inline-flex;
+      align-items:center;
+      gap: 10px;
+      transition: transform .06s ease, background .15s ease;
+      user-select:none;
+      white-space: nowrap;
+    }
+    .btn:active{ transform: translateY(1px); }
+    .btn.primary{
+      background: linear-gradient(135deg, rgba(34,197,94,.92), rgba(6,182,212,.92));
+      border-color: transparent;
+      color: #071018;
+    }
+    .btn.warn{
+      background: rgba(245,158,11,.12);
+      border-color: rgba(245,158,11,.25);
+    }
+    .btn.danger{
+      background: rgba(239,68,68,.12);
+      border-color: rgba(239,68,68,.25);
+    }
+    .btn.small{
+      height: 42px;
+      padding: 0 12px;
+      border-radius: 12px;
+      font-size: 13px;
+    }
+
+    .grid{
+      display:grid;
+      grid-template-columns: 1.2fr .8fr;
+      gap: 14px;
+      min-height: 0;
+    }
+
+    .panel{
+      padding: 14px;
+      min-height: 0;
+    }
+    .panel h2{
+      margin: 0 0 10px 0;
+      font-size: 14px;
+      color: var(--muted);
+      font-weight: 800;
+      letter-spacing: .3px;
+      text-transform: uppercase;
+    }
+
+    .row{
+      display:grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 12px;
+    }
+
+    .field{
+      display:flex;
+      flex-direction: column;
+      gap: 6px;
+    }
+    .field label{
+      font-size: 12px;
+      color: var(--muted);
+      font-weight: 700;
+    }
+    .input{
+      height: 48px;
+      border-radius: 14px;
+      border: 1px solid var(--line);
+      background: rgba(255,255,255,.02);
+      color: var(--text);
+      padding: 0 12px;
+      outline: none;
+      font-size: 14px;
+    }
+    .input:focus{ border-color: rgba(34,197,94,.4); box-shadow: 0 0 0 3px rgba(34,197,94,.12); }
+
+    .seg{
+      display:flex;
+      gap: 10px;
+      flex-wrap: wrap;
+    }
+    .chip{
+      border: 1px solid var(--line);
+      background: rgba(255,255,255,.02);
+      color: var(--muted);
+      padding: 10px 12px;
+      border-radius: 999px;
+      font-size: 12px;
+      font-weight: 800;
+      cursor:pointer;
+      user-select:none;
+    }
+    .chip.active{
+      color: #071018;
+      border-color: transparent;
+      background: linear-gradient(135deg, rgba(34,197,94,.85), rgba(6,182,212,.85));
+    }
+
+    /* Camera box */
+    .camWrap{
+      display:grid;
+      grid-template-columns: 1fr;
+      gap: 12px;
+      min-height: 0;
+    }
+    .camBox{
+      position: relative;
+      border-radius: var(--radius);
+      overflow: hidden;
+      border: 1px solid var(--line);
+      background: #050a14;
+      min-height: 380px;
+      height: 52vh; /* kiosk-ish */
+      max-height: 560px;
+    }
+    video{
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display:block;
+      transform: scaleX(-1); /* espelho pra frontal */
+    }
+    .camOverlay{
+      position:absolute;
+      inset:0;
+      pointer-events:none;
+      background:
+        linear-gradient(to right, rgba(255,255,255,.06) 1px, transparent 1px) 0 0 / 60px 60px,
+        linear-gradient(to bottom, rgba(255,255,255,.06) 1px, transparent 1px) 0 0 / 60px 60px;
+      opacity: .25;
+      mix-blend-mode: screen;
+    }
+    .reticle{
+      position:absolute;
+      inset:0;
+      pointer-events:none;
+    }
+    .reticle .eye{
+      position:absolute;
+      width: 130px; height: 80px;
+      border-radius: 999px;
+      border: 2px solid rgba(34,197,94,.75);
+      box-shadow: 0 0 0 3px rgba(34,197,94,.12);
+      top: 38%;
+    }
+    .reticle .eye.left{ left: 30%; }
+    .reticle .eye.right{ right: 30%; }
+    .reticle .line{
+      position:absolute;
+      left: 50%;
+      top: 20%;
+      bottom: 20%;
+      width: 2px;
+      background: rgba(6,182,212,.65);
+      transform: translateX(-1px);
+      box-shadow: 0 0 0 3px rgba(6,182,212,.10);
+    }
+    .reticle .hint{
+      position:absolute;
+      left: 14px;
+      bottom: 12px;
+      padding: 10px 12px;
+      border-radius: 14px;
+      border: 1px solid var(--line);
+      background: rgba(0,0,0,.35);
+      color: var(--text);
+      max-width: 70%;
+    }
+    .badge{
+      position:absolute;
+      top: 12px;
+      left: 12px;
+      padding: 8px 10px;
+      border-radius: 999px;
+      background: rgba(0,0,0,.45);
+      border: 1px solid var(--line);
+      font-size: 12px;
+      font-weight: 800;
+    }
+    .badge.ok{ border-color: rgba(34,197,94,.35); }
+    .badge.warn{ border-color: rgba(245,158,11,.35); }
+    .badge.err{ border-color: rgba(239,68,68,.35); }
+
+    .camActions{
+      display:flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      align-items:center;
+      justify-content: space-between;
+    }
+    .camActions .left, .camActions .right{
+      display:flex;
+      gap: 10px;
+      flex-wrap: wrap;
+      align-items:center;
+    }
+
+    /* Snapshot preview */
+    .snapRow{
+      display:grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 12px;
+    }
+    .snap{
+      border-radius: var(--radius);
+      overflow:hidden;
+      border: 1px solid var(--line);
+      background: rgba(255,255,255,.02);
+      min-height: 140px;
+      position:relative;
+    }
+    .snap img{
+      width:100%;
+      height: 180px;
+      object-fit: cover;
+      display:block;
+    }
+    .snap .cap{
+      padding: 10px 12px;
+      font-size: 12px;
+      color: var(--muted);
+      display:flex;
+      justify-content: space-between;
+      align-items:center;
+      gap: 10px;
+    }
+
+    /* Right panel (measures) */
+    .measures{
+      display:flex;
+      flex-direction: column;
+      gap: 12px;
+      min-height: 0;
+    }
+    .box{
+      padding: 12px;
+      border-radius: var(--radius);
+      border: 1px solid var(--line);
+      background: rgba(255,255,255,.02);
+    }
+    .boxTitle{
+      display:flex;
+      align-items:center;
+      justify-content: space-between;
+      gap: 10px;
+      margin-bottom: 10px;
+    }
+    .boxTitle .t{
+      font-weight: 900;
+      font-size: 13px;
+      letter-spacing: .2px;
+    }
+    .boxTitle .s{
+      color: var(--muted);
+      font-size: 12px;
+      font-weight: 700;
+    }
+    .miniRow{
+      display:grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 10px;
+    }
+
+    .rangeRow{
+      display:flex;
+      gap: 10px;
+      align-items:center;
+    }
+    input[type="range"]{ width: 100%; }
+
+    /* Views */
+    .view{ display:none; }
+    .view.active{ display:block; }
+
+    /* Modal */
+    .modalBack{
+      position: fixed;
+      inset:0;
+      background: rgba(0,0,0,.55);
+      display:none;
+      align-items:center;
+      justify-content:center;
+      padding: 18px;
+      z-index: 50;
+    }
+    .modalBack.show{ display:flex; }
+    .modal{
+      width: min(980px, 96vw);
+      max-height: 90vh;
+      overflow:auto;
+      padding: 16px;
+      border-radius: var(--radius);
+      border: 1px solid var(--line);
+      background: #0b1220;
+      box-shadow: var(--shadow);
+    }
+    .modalHead{
+      display:flex;
+      align-items:center;
+      justify-content: space-between;
+      gap: 10px;
+      margin-bottom: 10px;
+    }
+    .modalHead .title{
+      font-weight: 900;
+      font-size: 16px;
+    }
+    .report{
+      background: #ffffff;
+      color: #111827;
+      border-radius: 14px;
+      padding: 18px;
+    }
+    .report h1{ margin: 0 0 6px 0; font-size: 18px; }
+    .report p{ margin: 0 0 10px 0; color: #374151; }
+    .reportGrid{
+      display:grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 12px;
+      margin-top: 12px;
+    }
+    .reportCard{
+      border: 1px solid #e5e7eb;
+      border-radius: 12px;
+      padding: 12px;
+    }
+    .reportCard h3{ margin: 0 0 6px 0; font-size: 13px; }
+    .reportCard .kv{ font-size: 13px; display:flex; justify-content: space-between; gap: 10px; padding: 6px 0; border-bottom: 1px dashed #e5e7eb; }
+    .reportCard .kv:last-child{ border-bottom: 0; }
+
+    /* Responsive */
+    @media (max-width: 1100px){
+      .app{ grid-template-columns: 1fr; }
+      .sidebar{ position: relative; height: auto; top: auto; }
+      .grid{ grid-template-columns: 1fr; }
+      .camBox{ height: 48vh; max-height: 520px; }
+    }
+    @media (max-width: 640px){
+      .row{ grid-template-columns: 1fr; }
+      .snapRow{ grid-template-columns: 1fr; }
+      .reticle .eye{ width: 110px; height: 70px; }
+      .btn{ width: 100%; justify-content:center; }
+      .topRight{ width: 100%; justify-content: stretch; }
+    }
+
+    /* Print report only */
+    @media print{
+      body{ background: #fff; }
+      .modalBack{ position: static; inset:auto; background: transparent; display:block; padding: 0; }
+      .modal{ box-shadow:none; border:none; padding:0; background: transparent; }
+      .modalHead{ display:none; }
+      .report{ border-radius: 0; padding: 0; }
+    }
+  </style>
+</head>
+
+<body>
+  <div class="app">
+    <!-- SIDEBAR -->
+    <aside class="sidebar card">
+      <div class="brandRow">
+        <div class="brandLeft">
+          <div class="logo">IV</div>
+          <div class="brandTitle">
+            <div class="t1">Pré-atendimento</div>
+            <div class="t2">Totem • Protótipo UI</div>
+          </div>
+        </div>
+        <span class="pill" id="pillStatus">Offline</span>
+      </div>
+
+      <div class="card steps">
+        <h3>Etapas</h3>
+
+        <div class="step active" data-step="cliente" id="stepCliente">
+          <div class="dot">1</div>
+          <div class="stepText">
+            <div class="s1">Cliente</div>
+            <div class="s2">Identificação e OS</div>
+          </div>
+        </div>
+
+        <div class="step" data-step="medidas" id="stepMedidas">
+          <div class="dot">2</div>
+          <div class="stepText">
+            <div class="s1">Medidas</div>
+            <div class="s2">Frontal e lateral</div>
+          </div>
+        </div>
+
+        <div class="step" data-step="revisao" id="stepRevisao">
+          <div class="dot">3</div>
+          <div class="stepText">
+            <div class="s1">Revisão</div>
+            <div class="s2">Conferir e gerar relatório</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="sidebarFooter">
+        <div class="hint">
+          Dica: marque no chão o ponto do cliente e use instruções na tela para repetir posição.
+        </div>
+      </div>
+    </aside>
+
+    <!-- MAIN -->
+    <main class="main card">
+      <div class="topbar">
+        <div class="topLeft">
+          <h1 class="h1" id="pageTitle">Cliente</h1>
+          <div class="sub" id="pageSub">Cadastre os dados básicos antes de iniciar as medições.</div>
+        </div>
+        <div class="topRight">
+          <button class="btn small" id="btnGoPrev" type="button">⬅️ Voltar</button>
+          <button class="btn primary" id="btnGoNext" type="button">Avançar ➜</button>
+        </div>
+      </div>
+
+      <!-- VIEW: CLIENTE -->
+      <section class="view active" id="viewCliente">
+        <div class="grid">
+          <div class="panel card">
+            <h2>Dados do cliente</h2>
+            <div class="row">
+              <div class="field">
+                <label for="nome">Nome do cliente</label>
+                <input class="input" id="nome" placeholder="Ex.: Douglas Morais" />
+              </div>
+              <div class="field">
+                <label for="telefone">WhatsApp (opcional)</label>
+                <input class="input" id="telefone" placeholder="Ex.: (11) 99999-9999" />
+              </div>
+              <div class="field">
+                <label for="os">Número da OS</label>
+                <input class="input" id="os" placeholder="Ex.: 102345" />
+              </div>
+              <div class="field">
+                <label for="vendedor">Vendedor</label>
+                <input class="input" id="vendedor" placeholder="Ex.: Ana / João" />
+              </div>
+            </div>
+
+            <div style="height:12px"></div>
+
+            <h2>Fluxo</h2>
+            <div class="seg" aria-label="Tipo de fluxo">
+              <div class="chip active" data-flow="medidas">📏 Medidas</div>
+              <div class="chip" data-flow="visagismo">🙂 Visagismo (placeholder)</div>
+              <div class="chip" data-flow="mapeamento">🧠 Mapeamento visual (placeholder)</div>
+            </div>
+
+            <div style="height:12px"></div>
+
+            <div class="box">
+              <div class="boxTitle">
+                <div class="t">Nível de exigência (placeholder)</div>
+                <div class="s" id="exigLabel">Médio</div>
+              </div>
+              <div class="rangeRow">
+                <span class="pill">Básico</span>
+                <input type="range" id="exig" min="1" max="3" value="2" />
+                <span class="pill">Premium</span>
+              </div>
+            </div>
+          </div>
+
+          <div class="panel card">
+            <h2>Resumo</h2>
+            <div class="measures">
+              <div class="box">
+                <div class="boxTitle">
+                  <div class="t">Status</div>
+                  <div class="s" id="statusResumo">Aguardando dados</div>
+                </div>
+                <div class="hint" style="color: var(--muted);">
+                  Preencha Nome e OS. Em seguida, avance para iniciar as câmeras e capturar frontal e lateral.
+                </div>
+              </div>
+
+              <div class="box">
+                <div class="boxTitle">
+                  <div class="t">Atalhos</div>
+                  <div class="s">Protótipo</div>
+                </div>
+                <button class="btn small" id="btnOpenReport" type="button">🧾 Abrir relatório</button>
+                <button class="btn small" id="btnReset" type="button">🔄 Reiniciar sessão</button>
+              </div>
+
+              <div class="box">
+                <div class="boxTitle">
+                  <div class="t">QR WhatsApp (placeholder)</div>
+                  <div class="s">opcional</div>
+                </div>
+                <div class="hint">
+                  Aqui você pode renderizar um QR real com um lib (ex.: qrcodejs) e o link do WhatsApp.
+                </div>
+                <div style="height:10px"></div>
+                <div style="display:flex; gap:10px; align-items:center;">
+                  <div style="width:120px; height:120px; border-radius: 14px; border:1px dashed var(--line); display:flex; align-items:center; justify-content:center; color:var(--muted);">
+                    QR
+                  </div>
+                  <div class="hint">
+                    Exemplo de link: <br/>
+                    <span class="pill">wa.me/55SEUNUMERO</span>
+                  </div>
+                </div>
+              </div>
+
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- VIEW: MEDIDAS -->
+      <section class="view" id="viewMedidas">
+        <div class="grid">
+          <div class="panel card">
+            <h2>Câmera e captura</h2>
+
+            <div class="seg" aria-label="Modo de captura">
+              <div class="chip active" data-mode="frontal" id="chipFrontal">📷 Frontal (DNP/Altura)</div>
+              <div class="chip" data-mode="lateral" id="chipLateral">📷 Lateral (Vértice/Panto)</div>
+            </div>
+
+            <div style="height:10px"></div>
+
+            <div class="camWrap">
+              <div class="camBox" id="camBox">
+                <div class="badge warn" id="camBadge">Câmera parada</div>
+                <video id="video" playsinline></video>
+                <div class="camOverlay"></div>
+
+                <div class="reticle" id="reticleFrontal">
+                  <div class="line"></div>
+                  <div class="eye left"></div>
+                  <div class="eye right"></div>
+                  <div class="hint">
+                    <b>Frontal:</b> alinhe os olhos nos marcadores e mantenha o rosto reto.<br/>
+                    <span style="color:var(--muted)">Dica: não incline a cabeça.</span>
+                  </div>
+                </div>
+
+                <div class="reticle" id="reticleLateral" style="display:none;">
+                  <div class="hint">
+                    <b>Lateral:</b> gire o corpo para o lado e olhe para o ponto à frente.<br/>
+                    <span style="color:var(--muted)">Enquadre olho + armação + haste.</span>
+                  </div>
+                </div>
+              </div>
+
+              <div class="camActions">
+                <div class="left">
+                  <button class="btn" id="btnStartCam" type="button">🎥 Iniciar câmera</button>
+                  <button class="btn warn" id="btnSwitchCam" type="button">🔁 Trocar câmera</button>
+                  <span class="pill" id="camInfo">Sem stream</span>
+                </div>
+                <div class="right">
+                  <button class="btn primary" id="btnCapture" type="button">📸 Capturar</button>
+                  <button class="btn danger" id="btnStopCam" type="button">⏹️ Parar</button>
+                </div>
+              </div>
+
+              <div class="snapRow">
+                <div class="snap">
+                  <img id="imgFrontal" alt="Captura frontal" style="display:none;" />
+                  <div class="cap">
+                    <span>Frontal</span>
+                    <span class="pill" id="frontalPill">não capturada</span>
+                  </div>
+                </div>
+                <div class="snap">
+                  <img id="imgLateral" alt="Captura lateral" style="display:none;" />
+                  <div class="cap">
+                    <span>Lateral</span>
+                    <span class="pill" id="lateralPill">não capturada</span>
+                  </div>
+                </div>
+              </div>
+
+              <canvas id="canvas" style="display:none;"></canvas>
+            </div>
+          </div>
+
+          <div class="panel card">
+            <h2>Medidas (editáveis)</h2>
+
+            <div class="measures">
+              <div class="box">
+                <div class="boxTitle">
+                  <div class="t">DNP / Altura</div>
+                  <div class="s">Frontal</div>
+                </div>
+                <div class="miniRow">
+                  <div class="field">
+                    <label for="dnp">DNP (mm)</label>
+                    <input class="input" id="dnp" value="" placeholder="Ex.: 62.0" />
+                  </div>
+                  <div class="field">
+                    <label for="altura">Altura (mm)</label>
+                    <input class="input" id="altura" value="" placeholder="Ex.: 18.0" />
+                  </div>
+                </div>
+                <div style="height:8px"></div>
+                <div class="hint">No protótipo, você pode digitar manualmente. Depois plugamos o cálculo/IA.</div>
+              </div>
+
+              <div class="box">
+                <div class="boxTitle">
+                  <div class="t">Vértice / Panto</div>
+                  <div class="s">Lateral</div>
+                </div>
+                <div class="miniRow">
+                  <div class="field">
+                    <label for="vertice">Dist. Vértice (mm)</label>
+                    <input class="input" id="vertice" value="" placeholder="Ex.: 12.0" />
+                  </div>
+                  <div class="field">
+                    <label for="panto">Ângulo Pantoscópico (°)</label>
+                    <input class="input" id="panto" value="" placeholder="Ex.: 8.0" />
+                  </div>
+                </div>
+                <div style="height:8px"></div>
+                <div class="hint">Sugestão: lateral deve ser tomada sempre do mesmo lado (direito ou esquerdo).</div>
+              </div>
+
+              <div class="box">
+                <div class="boxTitle">
+                  <div class="t">Ações</div>
+                  <div class="s">Próxima etapa</div>
+                </div>
+                <button class="btn primary" id="btnFinishMeasures" type="button">✅ Concluir medições</button>
+                <div style="height:10px"></div>
+                <button class="btn" id="btnOpenReport2" type="button">🧾 Abrir relatório</button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- VIEW: REVISAO -->
+      <section class="view" id="viewRevisao">
+        <div class="grid">
+          <div class="panel card">
+            <h2>Revisão</h2>
+            <div class="box">
+              <div class="boxTitle">
+                <div class="t">Checklist</div>
+                <div class="s" id="checkPill">—</div>
+              </div>
+              <div class="hint" id="checkText" style="color: var(--muted);">
+                Verifique se as fotos estão boas e se as medidas estão preenchidas.
+              </div>
+              <div style="height:12px"></div>
+              <div class="snapRow">
+                <div class="snap">
+                  <img id="imgFrontal2" alt="Captura frontal (revisão)" style="display:none;" />
+                  <div class="cap">
+                    <span>Frontal</span>
+                    <span class="pill" id="frontalPill2">—</span>
+                  </div>
+                </div>
+                <div class="snap">
+                  <img id="imgLateral2" alt="Captura lateral (revisão)" style="display:none;" />
+                  <div class="cap">
+                    <span>Lateral</span>
+                    <span class="pill" id="lateralPill2">—</span>
+                  </div>
+                </div>
+              </div>
+              <div style="height:12px"></div>
+              <div class="miniRow">
+                <div class="box">
+                  <div class="boxTitle"><div class="t">Medidas</div><div class="s">editáveis</div></div>
+                  <div class="kvRow" style="display:flex; flex-direction:column; gap:8px;">
+                    <div style="display:flex; justify-content:space-between; gap:10px;">
+                      <span class="pill">DNP</span><b id="rvDnp">—</b>
+                    </div>
+                    <div style="display:flex; justify-content:space-between; gap:10px;">
+                      <span class="pill">Altura</span><b id="rvAltura">—</b>
+                    </div>
+                    <div style="display:flex; justify-content:space-between; gap:10px;">
+                      <span class="pill">Vértice</span><b id="rvVertice">—</b>
+                    </div>
+                    <div style="display:flex; justify-content:space-between; gap:10px;">
+                      <span class="pill">Panto</span><b id="rvPanto">—</b>
+                    </div>
+                  </div>
+                </div>
+
+                <div class="box">
+                  <div class="boxTitle"><div class="t">Saída</div><div class="s">relatório</div></div>
+                  <button class="btn primary" id="btnOpenReport3" type="button">🧾 Gerar relatório</button>
+                  <div style="height:10px"></div>
+                  <button class="btn" id="btnPrint" type="button">🖨️ Imprimir</button>
+                  <div style="height:10px"></div>
+                  <div class="hint">No seu ERP, você pode salvar isso na OS e anexar as imagens.</div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="panel card">
+            <h2>Dados do atendimento</h2>
+            <div class="measures">
+              <div class="box">
+                <div class="boxTitle"><div class="t">Cliente</div><div class="s">sessão</div></div>
+                <div class="hint" id="rvCliente">—</div>
+              </div>
+              <div class="box">
+                <div class="boxTitle"><div class="t">Observações</div><div class="s">opcional</div></div>
+                <textarea class="input" id="obs" style="height: 140px; padding:12px; resize: vertical;" placeholder="Ex.: cliente prefere armação leve, uso intenso em computador..."></textarea>
+              </div>
+              <div class="box">
+                <div class="boxTitle"><div class="t">Finalizar</div><div class="s">encerrar</div></div>
+                <button class="btn danger" id="btnEnd" type="button">🧹 Encerrar e limpar</button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- MODAL RELATORIO -->
+      <div class="modalBack" id="modalBack" role="dialog" aria-modal="true" aria-labelledby="modalTitle">
+        <div class="modal">
+          <div class="modalHead">
+            <div class="title" id="modalTitle">Relatório do Pré-atendimento</div>
+            <div style="display:flex; gap:10px; flex-wrap: wrap; justify-content:flex-end;">
+              <button class="btn small" id="btnPrint2" type="button">🖨️ Imprimir</button>
+              <button class="btn small" id="btnCloseModal" type="button">✖️ Fechar</button>
+            </div>
+          </div>
+
+          <div class="report" id="reportArea">
+            <h1>Relatório de Medidas</h1>
+            <p id="rpHeader">—</p>
+
+            <div class="reportGrid">
+              <div class="reportCard">
+                <h3>Medidas principais</h3>
+                <div class="kv"><span>DNP (mm)</span><b id="rpDnp">—</b></div>
+                <div class="kv"><span>Altura (mm)</span><b id="rpAltura">—</b></div>
+                <div class="kv"><span>Vértice (mm)</span><b id="rpVertice">—</b></div>
+                <div class="kv"><span>Pantoscópico (°)</span><b id="rpPanto">—</b></div>
+              </div>
+
+              <div class="reportCard">
+                <h3>Operação</h3>
+                <div class="kv"><span>Nível de exigência</span><b id="rpExig">—</b></div>
+                <div class="kv"><span>Observações</span><b id="rpObs">—</b></div>
+                <div class="kv"><span>Data/Hora</span><b id="rpNow">—</b></div>
+              </div>
+            </div>
+
+            <div style="height:12px"></div>
+
+            <div class="reportGrid">
+              <div class="reportCard">
+                <h3>Foto frontal (preview)</h3>
+                <div id="rpImgFrontalWrap" style="border:1px dashed #e5e7eb; border-radius: 12px; height: 220px; display:flex; align-items:center; justify-content:center; color:#6b7280;">
+                  Sem imagem
+                </div>
+              </div>
+              <div class="reportCard">
+                <h3>Foto lateral (preview)</h3>
+                <div id="rpImgLateralWrap" style="border:1px dashed #e5e7eb; border-radius: 12px; height: 220px; display:flex; align-items:center; justify-content:center; color:#6b7280;">
+                  Sem imagem
+                </div>
+              </div>
+            </div>
+
+            <div style="margin-top:12px; font-size:12px; color:#6b7280;">
+              Protótipo de tela • pronto para integrar com seu ERP/OS (salvar JSON + anexos de imagem).
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </main>
+  </div>
+
+  <script>
+    // ====== STATE ======
+    var state = {
+      step: "cliente",
+      mode: "frontal", // frontal | lateral
+      stream: null,
+      devices: [],
+      deviceIndex: 0,
+      shots: { frontal: null, lateral: null },
+      flow: "medidas",
+      exig: 2
+    };
+
+    // ====== HELPERS ======
+    function $(id){ return document.getElementById(id); }
+
+    function setStatusPill(text){
+      $("pillStatus").textContent = text;
+      $("pillStatus").style.color = (text === "Online") ? "#d1fae5" : "var(--muted)";
+    }
+
+    function setCamBadge(type, text){
+      var el = $("camBadge");
+      el.textContent = text;
+      el.className = "badge " + type;
+    }
+
+    function showView(step){
+      state.step = step;
+
+      var views = ["cliente","medidas","revisao"];
+      for (var i=0;i<views.length;i++){
+        var v = views[i];
+        $("view"+cap(v)).classList.toggle("active", v === step);
+      }
+
+      // Steps UI
+      setStepActive(step);
+
+      // Top title/sub
+      if(step === "cliente"){
+        $("pageTitle").textContent = "Cliente";
+        $("pageSub").textContent = "Cadastre os dados básicos antes de iniciar as medições.";
+      } else if(step === "medidas"){
+        $("pageTitle").textContent = "Medidas";
+        $("pageSub").textContent = "Capture frontal e lateral com overlays e revise as medidas.";
+      } else {
+        $("pageTitle").textContent = "Revisão";
+        $("pageSub").textContent = "Confira tudo e gere o relatório/print.";
+      }
+
+      refreshNavButtons();
+      refreshRevision();
+    }
+
+    function cap(s){ return s.charAt(0).toUpperCase() + s.slice(1); }
+
+    function setStepActive(step){
+      var map = {
+        cliente: "stepCliente",
+        medidas: "stepMedidas",
+        revisao: "stepRevisao"
+      };
+
+      var ids = ["stepCliente","stepMedidas","stepRevisao"];
+      for (var i=0;i<ids.length;i++){
+        $(ids[i]).classList.remove("active");
+      }
+      $(map[step]).classList.add("active");
+
+      // Mark done
+      $("stepCliente").classList.toggle("done", isClienteOk());
+      $("stepMedidas").classList.toggle("done", isMeasuresOk());
+      $("stepRevisao").classList.toggle("done", step === "revisao" && isMeasuresOk());
+    }
+
+    function refreshNavButtons(){
+      $("btnGoPrev").disabled = (state.step === "cliente");
+      $("btnGoNext").textContent = (state.step === "revisao") ? "Finalizar ✅" : "Avançar ➜";
+    }
+
+    function isClienteOk(){
+      return ($("nome").value.trim().length > 1) && ($("os").value.trim().length > 0);
+    }
+    function isMeasuresOk(){
+      return !!state.shots.frontal && !!state.shots.lateral;
+    }
+
+    function updateResumo(){
+      var ok = isClienteOk();
+      $("statusResumo").textContent = ok ? "Pronto para medir" : "Aguardando dados";
+      setStepActive(state.step);
+    }
+
+    function updateExigLabel(){
+      var v = parseInt($("exig").value, 10);
+      state.exig = v;
+      var label = (v === 1) ? "Básico" : (v === 2) ? "Médio" : "Premium";
+      $("exigLabel").textContent = label;
+    }
+
+    function setMode(mode){
+      state.mode = mode;
+
+      $("chipFrontal").classList.toggle("active", mode === "frontal");
+      $("chipLateral").classList.toggle("active", mode === "lateral");
+
+      $("reticleFrontal").style.display = (mode === "frontal") ? "block" : "none";
+      $("reticleLateral").style.display = (mode === "lateral") ? "block" : "none";
+
+      // mirror only for frontal
+      $("video").style.transform = (mode === "frontal") ? "scaleX(-1)" : "none";
+
+      $("camInfo").textContent = "Modo: " + (mode === "frontal" ? "Frontal" : "Lateral");
+    }
+
+    // ====== CAMERA ======
+    async function listDevices(){
+      try{
+        var devices = await navigator.mediaDevices.enumerateDevices();
+        state.devices = devices.filter(function(d){ return d.kind === "videoinput"; });
+      } catch(e){
+        state.devices = [];
+      }
+    }
+
+    async function startCamera(){
+      if(!navigator.mediaDevices || !navigator.mediaDevices.getUserMedia){
+        alert("getUserMedia não disponível neste navegador.");
+        return;
+      }
+      await listDevices();
+
+      var deviceId = null;
+      if(state.devices.length > 0){
+        deviceId = state.devices[state.deviceIndex].deviceId;
+      }
+
+      stopCamera();
+
+      try{
+        // constraints: ideal for kiosk distances 70-80cm: favor stable exposure
+        var constraints = {
+          audio: false,
+          video: {
+            deviceId: deviceId ? { exact: deviceId } : undefined,
+            width: { ideal: 1280 },
+            height: { ideal: 720 },
+            frameRate: { ideal: 30, max: 30 }
+          }
+        };
+
+        var stream = await navigator.mediaDevices.getUserMedia(constraints);
+        state.stream = stream;
+
+        var video = $("video");
+        video.srcObject = stream;
+        await video.play();
+
+        setStatusPill("Online");
+        setCamBadge("ok", "Câmera ativa");
+        $("camInfo").textContent = camLabel();
+
+      } catch(err){
+        setStatusPill("Offline");
+        setCamBadge("err", "Erro ao iniciar câmera");
+        $("camInfo").textContent = "Erro: " + (err && err.name ? err.name : "desconhecido");
+      }
+    }
+
+    function stopCamera(){
+      if(state.stream){
+        var tracks = state.stream.getTracks();
+        for (var i=0;i<tracks.length;i++){
+          tracks[i].stop();
+        }
+        state.stream = null;
+      }
+      var video = $("video");
+      video.srcObject = null;
+      setCamBadge("warn", "Câmera parada");
+      setStatusPill("Offline");
+      $("camInfo").textContent = "Sem stream";
+    }
+
+    function camLabel(){
+      var name = "padrão";
+      if(state.devices.length > 0){
+        var d = state.devices[state.deviceIndex];
+        name = d.label ? d.label : ("camera #" + (state.deviceIndex+1));
+      }
+      return "Cam: " + name;
+    }
+
+    async function switchCamera(){
+      await listDevices();
+      if(state.devices.length <= 1){
+        alert("Nenhuma outra câmera encontrada.");
+        return;
+      }
+      state.deviceIndex = (state.deviceIndex + 1) % state.devices.length;
+      await startCamera();
+    }
+
+    function captureShot(){
+      if(!state.stream){
+        alert("Inicie a câmera primeiro.");
+        return;
+      }
+
+      var video = $("video");
+      var canvas = $("canvas");
+      var ctx = canvas.getContext("2d");
+
+      var w = video.videoWidth || 1280;
+      var h = video.videoHeight || 720;
+      canvas.width = w;
+      canvas.height = h;
+
+      // If frontal mirrored, unmirror into snapshot (so it looks natural in report)
+      if(state.mode === "frontal"){
+        ctx.save();
+        ctx.translate(w, 0);
+        ctx.scale(-1, 1);
+        ctx.drawImage(video, 0, 0, w, h);
+        ctx.restore();
+      } else {
+        ctx.drawImage(video, 0, 0, w, h);
+      }
+
+      var dataUrl = canvas.toDataURL("image/jpeg", 0.90);
+
+      if(state.mode === "frontal"){
+        state.shots.frontal = dataUrl;
+        $("imgFrontal").src = dataUrl;
+        $("imgFrontal").style.display = "block";
+        $("frontalPill").textContent = "capturada";
+      } else {
+        state.shots.lateral = dataUrl;
+        $("imgLateral").src = dataUrl;
+        $("imgLateral").style.display = "block";
+        $("lateralPill").textContent = "capturada";
+      }
+
+      setStepActive(state.step);
+      updateCheckPills();
+    }
+
+    // ====== REPORT / REVIEW ======
+    function refreshRevision(){
+      // copy shots to review
+      if(state.shots.frontal){
+        $("imgFrontal2").src = state.shots.frontal;
+        $("imgFrontal2").style.display = "block";
+        $("frontalPill2").textContent = "ok";
+      } else {
+        $("imgFrontal2").style.display = "none";
+        $("frontalPill2").textContent = "faltando";
+      }
+
+      if(state.shots.lateral){
+        $("imgLateral2").src = state.shots.lateral;
+        $("imgLateral2").style.display = "block";
+        $("lateralPill2").textContent = "ok";
+      } else {
+        $("imgLateral2").style.display = "none";
+        $("lateralPill2").textContent = "faltando";
+      }
+
+      // measures
+      $("rvDnp").textContent = valueOrDash($("dnp").value);
+      $("rvAltura").textContent = valueOrDash($("altura").value);
+      $("rvVertice").textContent = valueOrDash($("vertice").value);
+      $("rvPanto").textContent = valueOrDash($("panto").value);
+
+      // client summary
+      var nome = $("nome").value.trim() || "—";
+      var os = $("os").value.trim() || "—";
+      var vend = $("vendedor").value.trim() || "—";
+      $("rvCliente").textContent = "Cliente: " + nome + " • OS: " + os + " • Vendedor: " + vend;
+
+      updateCheckPills();
+    }
+
+    function valueOrDash(v){
+      var s = (v || "").trim();
+      return s.length ? s : "—";
+    }
+
+    function updateCheckPills(){
+      var okCliente = isClienteOk();
+      var okMed = isMeasuresOk();
+
+      if(state.step === "revisao"){
+        $("checkPill").textContent = okMed ? "Tudo pronto" : "Pendências";
+        $("checkText").textContent = okMed
+          ? "Ótimo! Gere o relatório e imprima ou salve na OS."
+          : "Faltam capturas (frontal e/ou lateral). Volte para Medidas e capture.";
+      }
+      $("stepCliente").classList.toggle("done", okCliente);
+      $("stepMedidas").classList.toggle("done", okMed);
+    }
+
+    function openReport(){
+      // fill report
+      var nome = $("nome").value.trim() || "—";
+      var tel = $("telefone").value.trim() || "—";
+      var os = $("os").value.trim() || "—";
+      var vend = $("vendedor").value.trim() || "—";
+      var exig = (state.exig === 1) ? "Básico" : (state.exig === 2) ? "Médio" : "Premium";
+      var obs = ($("obs").value || "").trim();
+
+      $("rpHeader").textContent = "Cliente: " + nome + " • WhatsApp: " + tel + " • OS: " + os + " • Vendedor: " + vend;
+      $("rpDnp").textContent = valueOrDash($("dnp").value);
+      $("rpAltura").textContent = valueOrDash($("altura").value);
+      $("rpVertice").textContent = valueOrDash($("vertice").value);
+      $("rpPanto").textContent = valueOrDash($("panto").value);
+      $("rpExig").textContent = exig;
+      $("rpObs").textContent = obs.length ? obs : "—";
+      $("rpNow").textContent = new Date().toLocaleString("pt-BR");
+
+      // images
+      setReportImage("rpImgFrontalWrap", state.shots.frontal);
+      setReportImage("rpImgLateralWrap", state.shots.lateral);
+
+      $("modalBack").classList.add("show");
+      refreshRevision();
+    }
+
+    function setReportImage(containerId, dataUrl){
+      var el = $(containerId);
+      el.innerHTML = "";
+      if(!dataUrl){
+        el.textContent = "Sem imagem";
+        el.style.display = "flex";
+        el.style.alignItems = "center";
+        el.style.justifyContent = "center";
+        el.style.color = "#6b7280";
+        return;
+      }
+      var img = document.createElement("img");
+      img.src = dataUrl;
+      img.alt = "Captura";
+      img.style.width = "100%";
+      img.style.height = "220px";
+      img.style.objectFit = "cover";
+      img.style.borderRadius = "10px";
+      el.appendChild(img);
+    }
+
+    function closeReport(){
+      $("modalBack").classList.remove("show");
+    }
+
+    function printReport(){
+      openReport();
+      setTimeout(function(){
+        window.print();
+      }, 250);
+    }
+
+    // ====== NAV ======
+    function goNext(){
+      if(state.step === "cliente"){
+        if(!isClienteOk()){
+          alert("Preencha pelo menos Nome e OS.");
+          return;
+        }
+        showView("medidas");
+        return;
+      }
+      if(state.step === "medidas"){
+        showView("revisao");
+        return;
+      }
+      // revisao -> finalize
+      if(state.step === "revisao"){
+        openReport();
+      }
+    }
+
+    function goPrev(){
+      if(state.step === "medidas") showView("cliente");
+      else if(state.step === "revisao") showView("medidas");
+    }
+
+    // ====== RESET ======
+    function resetSession(){
+      stopCamera();
+      state.shots.frontal = null;
+      state.shots.lateral = null;
+
+      $("imgFrontal").style.display = "none";
+      $("imgLateral").style.display = "none";
+      $("imgFrontal2").style.display = "none";
+      $("imgLateral2").style.display = "none";
+
+      $("frontalPill").textContent = "não capturada";
+      $("lateralPill").textContent = "não capturada";
+
+      $("dnp").value = "";
+      $("altura").value = "";
+      $("vertice").value = "";
+      $("panto").value = "";
+      $("obs").value = "";
+
+      $("statusResumo").textContent = "Aguardando dados";
+      showView("cliente");
+      updateResumo();
+    }
+
+    // ====== EVENTS ======
+    function bindEvents(){
+      // Step clicks
+      var steps = document.querySelectorAll(".step");
+      for (var i=0;i<steps.length;i++){
+        steps[i].addEventListener("click", function(){
+          var to = this.getAttribute("data-step");
+          if(to === "medidas" && !isClienteOk()){
+            alert("Preencha Nome e OS antes de ir para Medidas.");
+            return;
+          }
+          showView(to);
+        });
+      }
+
+      // flow chips (placeholder)
+      var chips = document.querySelectorAll(".chip[data-flow]");
+      for (var i=0;i<chips.length;i++){
+        chips[i].addEventListener("click", function(){
+          var flow = this.getAttribute("data-flow");
+          state.flow = flow;
+
+          for (var j=0;j<chips.length;j++) chips[j].classList.remove("active");
+          this.classList.add("active");
+
+          if(flow !== "medidas"){
+            alert("Este é um protótipo. '" + flow + "' está como placeholder.");
+          }
+        });
+      }
+
+      // mode chips
+      $("chipFrontal").addEventListener("click", function(){ setMode("frontal"); });
+      $("chipLateral").addEventListener("click", function(){ setMode("lateral"); });
+
+      // camera actions
+      $("btnStartCam").addEventListener("click", startCamera);
+      $("btnStopCam").addEventListener("click", stopCamera);
+      $("btnSwitchCam").addEventListener("click", switchCamera);
+      $("btnCapture").addEventListener("click", captureShot);
+
+      // finish measures
+      $("btnFinishMeasures").addEventListener("click", function(){
+        if(!isMeasuresOk()){
+          alert("Capture as duas fotos: frontal e lateral.");
+          return;
+        }
+        showView("revisao");
+      });
+
+      // nav
+      $("btnGoNext").addEventListener("click", goNext);
+      $("btnGoPrev").addEventListener("click", goPrev);
+
+      // input updates
+      $("nome").addEventListener("input", updateResumo);
+      $("os").addEventListener("input", updateResumo);
+      $("exig").addEventListener("input", updateExigLabel);
+
+      // report
+      $("btnOpenReport").addEventListener("click", openReport);
+      $("btnOpenReport2").addEventListener("click", openReport);
+      $("btnOpenReport3").addEventListener("click", openReport);
+      $("btnCloseModal").addEventListener("click", closeReport);
+      $("modalBack").addEventListener("click", function(e){
+        if(e.target === $("modalBack")) closeReport();
+      });
+      $("btnPrint").addEventListener("click", printReport);
+      $("btnPrint2").addEventListener("click", function(){ window.print(); });
+
+      // reset/end
+      $("btnReset").addEventListener("click", resetSession);
+      $("btnEnd").addEventListener("click", resetSession);
+
+      // refresh review when measures change
+      var mIds = ["dnp","altura","vertice","panto","vendedor","telefone","obs"];
+      for (var i=0;i<mIds.length;i++){
+        $(mIds[i]).addEventListener("input", refreshRevision);
+      }
+    }
+
+    // ====== INIT ======
+    function init(){
+      setStatusPill("Offline");
+      setMode("frontal");
+      updateExigLabel();
+      updateResumo();
+      bindEvents();
+    }
+
+    init();
+  </script>
+</body>
+</html>

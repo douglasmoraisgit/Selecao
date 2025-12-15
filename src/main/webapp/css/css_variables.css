@@ -1,0 +1,162 @@
+/**
+ * variables.css
+ * Variáveis CSS globais do sistema
+ */
+
+:root {
+    /* ========================================
+       🎨 CORES PRINCIPAIS
+       ======================================== */
+    --primary-color: #667eea;
+    --primary-dark: #764ba2;
+    --secondary-color: #4CAF50;
+    --secondary-dark: #45a049;
+    
+    /* Cores de Ação */
+    --success-color: #4CAF50;
+    --warning-color: #ff9800;
+    --danger-color: #f44336;
+    --info-color: #2196F3;
+    
+    /* Cores de Texto */
+    --text-primary: #333;
+    --text-secondary: #666;
+    --text-tertiary: #999;
+    --text-light: #aaa;
+    
+    /* Cores de Background */
+    --bg-primary: #ffffff;
+    --bg-secondary: #f8fafc;
+    --bg-tertiary: #e2e8f0;
+    --bg-dark: #1e293b;
+    
+    /* Gradientes */
+    --gradient-primary: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    --gradient-success: linear-gradient(135deg, #4CAF50 0%, #45a049 100%);
+    --gradient-warning: linear-gradient(135deg, #f59e0b 0%, #d97706 100%);
+    --gradient-danger: linear-gradient(135deg, #ef4444 0%, #dc2626 100%);
+    --gradient-bg: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    
+    /* ========================================
+       📏 ESPAÇAMENTOS
+       ======================================== */
+    --spacing-1: 4px;
+    --spacing-2: 8px;
+    --spacing-3: 12px;
+    --spacing-4: 16px;
+    --spacing-5: 20px;
+    --spacing-6: 24px;
+    --spacing-8: 32px;
+    --spacing-10: 40px;
+    --spacing-12: 48px;
+    --spacing-16: 64px;
+    
+    /* ========================================
+       🔤 TIPOGRAFIA
+       ======================================== */
+    --font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    --font-mono: 'Courier New', monospace;
+    
+    --font-size-xs: 0.75rem;    /* 12px */
+    --font-size-sm: 0.875rem;   /* 14px */
+    --font-size-base: 1rem;     /* 16px */
+    --font-size-lg: 1.125rem;   /* 18px */
+    --font-size-xl: 1.25rem;    /* 20px */
+    --font-size-2xl: 1.5rem;    /* 24px */
+    --font-size-3xl: 1.875rem;  /* 30px */
+    --font-size-4xl: 2.25rem;   /* 36px */
+    
+    --font-weight-normal: 400;
+    --font-weight-medium: 500;
+    --font-weight-semibold: 600;
+    --font-weight-bold: 700;
+    
+    --line-height-tight: 1.25;
+    --line-height-normal: 1.5;
+    --line-height-relaxed: 1.75;
+    
+    /* ========================================
+       🔲 BORDAS E RAIOS
+       ======================================== */
+    --radius-sm: 6px;
+    --radius-md: 10px;
+    --radius-lg: 15px;
+    --radius-xl: 20px;
+    --radius-full: 50%;
+    
+    --border-width: 1px;
+    --border-width-thick: 2px;
+    --border-width-bold: 3px;
+    
+    /* ========================================
+       🌑 SOMBRAS
+       ======================================== */
+    --shadow-xs: 0 2px 4px rgba(0, 0, 0, 0.05);
+    --shadow-sm: 0 2px 8px rgba(0, 0, 0, 0.08);
+    --shadow-md: 0 4px 12px rgba(0, 0, 0, 0.1);
+    --shadow-lg: 0 10px 30px rgba(0, 0, 0, 0.15);
+    --shadow-xl: 0 20px 60px rgba(0, 0, 0, 0.3);
+    
+    --shadow-primary: 0 4px 15px rgba(102, 126, 234, 0.3);
+    --shadow-success: 0 4px 15px rgba(76, 175, 80, 0.3);
+    --shadow-warning: 0 4px 15px rgba(245, 158, 11, 0.3);
+    --shadow-danger: 0 4px 15px rgba(239, 68, 68, 0.3);
+    
+    /* ========================================
+       ⏱️ TRANSIÇÕES
+       ======================================== */
+    --transition-fast: 0.15s ease;
+    --transition-base: 0.3s ease;
+    --transition-slow: 0.5s ease;
+    
+    --ease-in: cubic-bezier(0.4, 0, 1, 1);
+    --ease-out: cubic-bezier(0, 0, 0.2, 1);
+    --ease-in-out: cubic-bezier(0.4, 0, 0.2, 1);
+    --ease-bounce: cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    
+    /* ========================================
+       📱 BREAKPOINTS (para referência)
+       ======================================== */
+    /* 
+    --breakpoint-sm: 480px;
+    --breakpoint-md: 768px;
+    --breakpoint-lg: 1024px;
+    --breakpoint-xl: 1280px;
+    */
+    
+    /* ========================================
+       🎯 Z-INDEX LAYERS
+       ======================================== */
+    --z-base: 1;
+    --z-dropdown: 1000;
+    --z-sticky: 1100;
+    --z-fixed: 1200;
+    --z-modal-backdrop: 2000;
+    --z-modal: 2001;
+    --z-sidebar: 2100;
+    --z-popover: 3000;
+    --z-toast: 10000;
+    
+    /* ========================================
+       📐 DIMENSÕES
+       ======================================== */
+    --sidebar-width: 280px;
+    --header-height: 80px;
+    --fab-size: 65px;
+    --badge-size: 24px;
+}
+
+/* ========================================
+   🌓 DARK MODE (preparado para futuro)
+   ======================================== */
+@media (prefers-color-scheme: dark) {
+    :root {
+        /* Descomente quando implementar dark mode */
+        /*
+        --text-primary: #f8fafc;
+        --text-secondary: #cbd5e1;
+        --bg-primary: #1e293b;
+        --bg-secondary: #0f172a;
+        */
+    }
+}

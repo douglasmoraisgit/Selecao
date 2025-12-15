@@ -1,0 +1,68 @@
+/**
+ * css_user_menu.css
+ * Estilos para integrar o menu do usuário na toolbar existente
+ */
+
+/* Ajuste do container na toolbar */
+.toolbar #userMenuContainer {
+    margin-left: auto;
+    margin-right: 8px;
+}
+
+.toolbar #userMenuContainer .user-menu {
+    gap: 8px;
+}
+
+.toolbar #userMenuContainer .user-info {
+    display: none; /* Esconde info em telas pequenas */
+}
+
+.toolbar #userMenuContainer .user-name {
+    color: white;
+    font-size: 13px;
+}
+
+.toolbar #userMenuContainer .user-loja {
+    color: rgba(255, 255, 255, 0.7);
+    font-size: 11px;
+}
+
+.toolbar #userMenuContainer .user-avatar {
+    width: 36px;
+    height: 36px;
+    font-size: 13px;
+    background: rgba(255, 255, 255, 0.2);
+    box-shadow: none;
+}
+
+.toolbar #userMenuContainer .user-avatar:hover {
+    background: rgba(255, 255, 255, 0.3);
+    transform: scale(1.05);
+}
+
+/* Dropdown ajustado para a toolbar */
+.toolbar #userMenuContainer .user-dropdown {
+    top: calc(100% + 12px);
+    right: 0;
+}
+
+/* Em telas maiores, mostra o nome */
+@media (min-width: 768px) {
+    .toolbar #userMenuContainer .user-info {
+        display: flex;
+    }
+}
+
+/* Em telas muito pequenas */
+@media (max-width: 480px) {
+    .toolbar #userMenuContainer {
+        margin-left: 8px;
+        margin-right: 4px;
+    }
+    
+    .toolbar #userMenuContainer .user-avatar {
+        width: 32px;
+        height: 32px;
+        font-size: 12px;
+    }
+}

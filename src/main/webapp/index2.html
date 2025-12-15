@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <meta name="theme-color" content="#667eea">
+    <meta name="description" content="Sistema de Seleção de Lentes - OptoFreela">
+    
+    <title>Sistema de Lentes - OptoFreela</title>
+    
+    <!-- CSS FILES (Ordem importa!) -->
+    <link rel="stylesheet" href="css/css_display-produtos-tratamento.css">
+    
+    <link rel="stylesheet" href="css/css_variables.css">
+    <link rel="stylesheet" href="css/css_base.css">
+    <link rel="stylesheet" href="css/css_layout.css">
+    <link rel="stylesheet" href="css/css_buttons.css">
+    <link rel="stylesheet" href="css/css_carrinho-tratamento.css">
+    <link rel="stylesheet" href="css/css_cards_simple.css">
+    <link rel="stylesheet" href="css/css_card_selection.css">
+    <link rel="stylesheet" href="css/css_card_coloracao.css">
+    <link rel="stylesheet" href="css/css_sidebar.css">
+    <link rel="stylesheet" href="css/css_sidebar_colors.css">
+    <link rel="stylesheet" href="css/css_sidebar_options.css">
+    <link rel="stylesheet" href="css/css_sidebar_no_blur.css">
+    <link rel="stylesheet" href="css/css_toolbar.css">
+    <link rel="stylesheet" href="css/css_produtos.css">
+    <link rel="stylesheet" href="css/css_botao_flutuante.css">
+    <link rel="stylesheet" href="css/css_receita.css">
+    <link rel="stylesheet" href="css/css_global.css">
+    <link rel="stylesheet" href="css/css_global.css">
+</head>
+
+
+<body>
+    <!-- GLOBAL LOADER -->
+    <div id="globalLoader">
+        <div class="spinner"></div>
+        <div class="text">Carregando sistema...</div>
+    </div>
+
+    <!-- TOOLBAR -->
+    <div class="toolbar">
+        <button class="toolbar__btn toolbar__btn--prescription" id="toolbarPrescription">
+            <span class="toolbar__btn-icon">📋</span>
+            <span class="toolbar__btn-text">Receita</span>
+        </button>
+        
+        <div class="toolbar__search">
+            <span class="toolbar__search-icon">🔍</span>
+            <input type="text" 
+                   class="toolbar__search-input" 
+                   id="toolbarSearch" 
+                   placeholder="Buscar produtos..." 
+                   autocomplete="off">
+            <span class="toolbar__search-indicator"></span>
+        </div>
+        
+        <button class="toolbar__btn toolbar__btn--server" id="toolbarServer">
+            <span class="toolbar__btn-icon">⚙️</span>
+            <span class="toolbar__btn-text">Servidor</span>
+        </button>
+    </div>
+
+    <!-- MOBILE MENU TOGGLES -->
+    <button class="mobile-menu-toggle" onclick="toggleLeftSidebar()">☰</button>
+    <button class="options-menu-toggle" onclick="toggleRightSidebar()">⚙️</button>
+
+    <!-- BACKDROPS -->
+    <div class="sidebar-backdrop" id="leftBackdrop"></div>
+    <div class="sidebar-backdrop" id="rightBackdrop"></div>
+
+    <!-- SIDEBAR ESQUERDA - Navegação Rápida -->
+    <aside class="sidebar" id="leftSidebar">
+        <div class="sidebar__header">
+            <div class="sidebar__title">
+                <span class="sidebar__title-icon">🚀</span>
+                <span>Navegação Rápida</span>
+            </div>
+            <button class="sidebar__toggle" onclick="closeLeftSidebar()">✕</button>
+        </div>
+        <nav class="sidebar__menu"></nav>
+    </aside>
+
+    <!-- SIDEBAR DIREITA - Opções -->
+    <aside class="sidebar-right" id="optionsSidebar">
+        <div class="sidebar__header">
+            <div class="sidebar__title">
+                <span class="sidebar__title-icon">⚙️</span>
+                <span>Opções</span>
+            </div>
+            <button class="sidebar__toggle" onclick="closeRightSidebar()">✕</button>
+        </div>
+        <nav class="sidebar__menu"></nav>
+    </aside>
+
+    <!-- MAIN CONTENT -->
+    <div class="app-container" id="appContainer">
+        
+        <!-- Espaçamento para toolbar -->
+        <div class="toolbar-spacer"></div>
+
+        <!-- Header Expandido (navegação interna) -->
+        <div class="expanded-header" id="expandedHeader" style="display: none;">
+            <button class="expanded-header__back" id="backButton">
+                ← Voltar
+            </button>
+            <h2 class="expanded-header__title" id="expandedTitle">Título</h2>
+            <div class="expanded-header__spacer"></div>
+        </div>
+
+        <!-- Breadcrumb -->
+        <div id="breadcrumbContainer" class="breadcrumb" style="display: none;"></div>
+
+        <!-- Descrição do Nível -->
+        <p class="level-description" id="levelDescription" style="display: none;"></p>
+
+        <!-- Container dos Cards -->
+        <div id="cardsContainer"></div>
+
+        <!-- Container de Produtos (DisplayProdutosView) -->
+        <div id="produtosContainer"></div>
+        
+        <!-- Container do Carrinho -->
+        <div id="carrinhoContainer"></div>
+        
+        <!-- Botão Voltar antigo (removido - agora está no header) -->
+
+    </div>
+
+    <!-- JAVASCRIPT - ES6 MODULES -->
+    <script type="module" src="js/main.js"></script>
+
+</body>
+</html>

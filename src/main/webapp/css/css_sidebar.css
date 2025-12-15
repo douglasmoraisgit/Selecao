@@ -1,0 +1,419 @@
+/**
+ * sidebar.css
+ * Menu lateral de navegação - Sistema de Lentes
+ */
+
+/* ========================================
+   🎯 SIDEBAR CONTAINER
+   ======================================== */
+.sidebar {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: var(--sidebar-width);
+    height: 100vh;
+    height: calc(var(--vh, 1vh) * 100);
+    background: linear-gradient(180deg, #5b6fd8 0%, #4a5dc5 100%);
+    color: white;
+    overflow-y: auto;
+    z-index: var(--z-sidebar);
+    transition: transform var(--transition-base);
+    box-shadow: 4px 0 20px rgba(0, 0, 0, 0.15);
+}
+
+/* Scrollbar da sidebar */
+.sidebar::-webkit-scrollbar {
+    width: 6px;
+}
+
+.sidebar::-webkit-scrollbar-track {
+    background: rgba(255, 255, 255, 0.1);
+}
+
+.sidebar::-webkit-scrollbar-thumb {
+    background: rgba(255, 255, 255, 0.3);
+    border-radius: 3px;
+}
+
+.sidebar::-webkit-scrollbar-thumb:hover {
+    background: rgba(255, 255, 255, 0.5);
+}
+
+/* Sidebar escondida (mobile) */
+.sidebar--hidden {
+    transform: translateX(-100%);
+}
+
+/* ========================================
+   📱 SIDEBAR HEADER
+   ======================================== */
+.sidebar__header {
+    padding: var(--spacing-5);
+    background: rgba(0, 0, 0, 0.15);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+    min-height: 60px;
+}
+
+.sidebar__title {
+    display: flex;
+    align-items: center;
+    gap: var(--spacing-3);
+    font-size: var(--font-size-lg);
+    font-weight: var(--font-weight-semibold);
+}
+
+.sidebar__title-icon {
+    font-size: var(--font-size-xl);
+}
+
+.sidebar__toggle {
+    background: transparent;
+    border: none;
+    color: white;
+    font-size: var(--font-size-2xl);
+    cursor: pointer;
+    padding: var(--spacing-2);
+    border-radius: var(--radius-sm);
+    transition: background var(--transition-base);
+    display: none; /* Mostra só no mobile */
+}
+
+.sidebar__toggle:hover {
+    background: rgba(255, 255, 255, 0.1);
+}
+
+/* ========================================
+   🗂️ SIDEBAR MENU
+   ======================================== */
+.sidebar__menu {
+    padding: var(--spacing-4) 0;
+}
+
+/* Seção do menu */
+.sidebar__section {
+    margin-bottom: var(--spacing-6);
+}
+
+.sidebar__section-title {
+    padding: var(--spacing-3) var(--spacing-5);
+    font-size: var(--font-size-xs);
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    opacity: 0.7;
+    font-weight: var(--font-weight-semibold);
+    display: flex;
+    align-items: center;
+    gap: var(--spacing-2);
+}
+
+.sidebar__section-badge {
+    background: rgba(255, 255, 255, 0.2);
+    padding: 2px 8px;
+    border-radius: var(--radius-full);
+    font-size: var(--font-size-xs);
+    font-weight: var(--font-weight-bold);
+}
+
+.sidebar__section-badge--unica {
+    background: linear-gradient(135deg, #f44336 0%, #e91e63 100%);
+}
+
+.sidebar__section-badge--multipla {
+    background: linear-gradient(135deg, #4CAF50 0%, #8BC34A 100%);
+}
+
+/* Lista de itens */
+.sidebar__list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+/* ========================================
+   🔘 SIDEBAR ITEM
+   ======================================== */
+.sidebar__item {
+    display: flex;
+    align-items: center;
+    gap: var(--spacing-3);
+    padding: var(--spacing-3) var(--spacing-5);
+    color: rgba(255, 255, 255, 0.9);
+    cursor: pointer;
+    transition: all var(--transition-base);
+    position: relative;
+    font-size: var(--font-size-base);
+}
+
+.sidebar__item::before {
+    content: '';
+    position: absolute;
+    left: 0;
+    top: 0;
+    bottom: 0;
+    width: 4px;
+    background: white;
+    transform: scaleY(0);
+    transition: transform var(--transition-base);
+}
+
+.sidebar__item:hover {
+    background: rgba(255, 255, 255, 0.1);
+    color: white;
+}
+
+.sidebar__item:hover::before {
+    transform: scaleY(1);
+}
+
+/* Item ativo */
+.sidebar__item--active {
+    background: rgba(255, 255, 255, 0.15);
+    color: white;
+    font-weight: var(--font-weight-semibold);
+}
+
+.sidebar__item--active::before {
+    transform: scaleY(1);
+}
+
+/* Ícone do item */
+.sidebar__item-icon {
+    font-size: var(--font-size-lg);
+    width: 24px;
+    text-align: center;
+    flex-shrink: 0;
+}
+
+/* Texto do item */
+.sidebar__item-text {
+    flex: 1;
+}
+
+/* Badge no item */
+.sidebar__item-badge {
+    background: rgba(255, 255, 255, 0.2);
+    padding: 2px 8px;
+    border-radius: var(--radius-full);
+    font-size: var(--font-size-xs);
+    font-weight: var(--font-weight-bold);
+}
+
+/* ========================================
+   🎨 SIDEBAR BACKDROP (Mobile)
+   ======================================== */
+.sidebar-backdrop {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100vh;
+    height: calc(var(--vh, 1vh) * 100);
+    background: rgba(0, 0, 0, 0.5);
+    z-index: calc(var(--z-sidebar) - 1);
+    opacity: 0;
+    visibility: hidden;
+    transition: all var(--transition-base);
+    backdrop-filter: blur(4px);
+}
+
+.sidebar-backdrop--visible {
+    opacity: 1;
+    visibility: visible;
+}
+
+/* ========================================
+   📱 MOBILE MENU TOGGLE
+   ======================================== */
+.mobile-menu-toggle {
+    display: none;
+    position: fixed;
+    top: var(--spacing-4, 16px);
+    left: var(--spacing-4, 16px);
+    z-index: 2200;
+    background: rgba(0, 0, 0, 0.3);
+    color: white;
+    border: none;
+    padding: var(--spacing-3, 12px);
+    border-radius: var(--radius-md, 8px);
+    cursor: pointer;
+    font-size: var(--font-size-2xl, 24px);
+    backdrop-filter: blur(10px);
+    box-shadow: var(--shadow-md, 0 4px 6px rgba(0,0,0,0.1));
+    transition: all 0.3s ease;
+}
+
+.mobile-menu-toggle:hover {
+    background: rgba(0, 0, 0, 0.5);
+    transform: scale(1.05);
+}
+
+/* ========================================
+   📐 AJUSTE DO CONTEÚDO (quando sidebar visível)
+   ======================================== */
+.app-container--sidebar-visible {
+    margin-left: var(--sidebar-width);
+}
+
+/* ========================================
+   📱 RESPONSIVE
+   ======================================== */
+
+/* Tablet */
+@media (max-width: 1024px) {
+    .sidebar {
+        width: 240px;
+    }
+    
+    .app-container--sidebar-visible {
+        margin-left: 240px;
+    }
+}
+
+/* Mobile */
+@media (max-width: 768px) {
+    .sidebar {
+        transform: translateX(-100%);
+    }
+    
+    .sidebar--visible {
+        transform: translateX(0);
+    }
+    
+    .app-container--sidebar-visible {
+        margin-left: 0;
+    }
+    
+    .sidebar__toggle {
+        display: block;
+    }
+    
+    /* Menu hamburguer (mostrar no header quando mobile) */
+    .mobile-menu-toggle {
+        display: block; /* Visível no mobile */
+        position: fixed;
+        top: var(--spacing-4);
+        left: var(--spacing-4);
+        z-index: calc(var(--z-sidebar) + 1);
+        background: rgba(0, 0, 0, 0.3);
+        color: white;
+        border: none;
+        padding: var(--spacing-3);
+        border-radius: var(--radius-md);
+        cursor: pointer;
+        font-size: var(--font-size-2xl);
+        backdrop-filter: blur(10px);
+        box-shadow: var(--shadow-md);
+        transition: all var(--transition-base);
+    }
+    
+    .mobile-menu-toggle:hover {
+        background: rgba(0, 0, 0, 0.5);
+        transform: scale(1.05);
+    }
+}
+
+/* Desktop - esconder hamburguer */
+@media (min-width: 769px) {
+    .mobile-menu-toggle {
+        display: none;
+    }
+}
+
+/* Small Mobile */
+@media (max-width: 480px) {
+    .sidebar {
+        width: 280px;
+    }
+    
+    .sidebar__item {
+        padding: var(--spacing-3) var(--spacing-4);
+        font-size: var(--font-size-sm);
+    }
+}
+
+/* ========================================
+   🎯 VARIAÇÕES DA SIDEBAR
+   ======================================== */
+
+/* Sidebar compacta (ícones apenas) */
+.sidebar--compact {
+    width: 70px;
+}
+
+.sidebar--compact .sidebar__item-text {
+    display: none;
+}
+
+.sidebar--compact .sidebar__section-title {
+    display: none;
+}
+
+.sidebar--compact .sidebar__item {
+    justify-content: center;
+    padding: var(--spacing-4);
+}
+
+.sidebar--compact .sidebar__item-icon {
+    font-size: var(--font-size-2xl);
+}
+
+/* Sidebar com hover expandida */
+.sidebar--compact:hover {
+    width: var(--sidebar-width);
+}
+
+.sidebar--compact:hover .sidebar__item-text,
+.sidebar--compact:hover .sidebar__section-title {
+    display: block;
+}
+
+.sidebar--compact:hover .sidebar__item {
+    justify-content: flex-start;
+    padding: var(--spacing-3) var(--spacing-5);
+}
+
+.sidebar--compact:hover .sidebar__item-icon {
+    font-size: var(--font-size-lg);
+}
+
+/* ========================================
+   🎨 TEMAS DA SIDEBAR
+   ======================================== */
+
+/* Sidebar escura */
+.sidebar--dark {
+    background: linear-gradient(180deg, #1e293b 0%, #0f172a 100%);
+}
+
+/* Sidebar clara */
+.sidebar--light {
+    background: linear-gradient(180deg, #f8fafc 0%, #e2e8f0 100%);
+    color: var(--text-primary);
+    box-shadow: 4px 0 20px rgba(0, 0, 0, 0.08);
+}
+
+.sidebar--light .sidebar__header {
+    background: rgba(0, 0, 0, 0.05);
+    border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+}
+
+.sidebar--light .sidebar__item {
+    color: var(--text-secondary);
+}
+
+.sidebar--light .sidebar__item:hover {
+    background: rgba(0, 0, 0, 0.05);
+    color: var(--text-primary);
+}
+
+.sidebar--light .sidebar__item--active {
+    background: rgba(102, 126, 234, 0.1);
+    color: var(--primary-color);
+}
+
+.sidebar--light .sidebar__item::before {
+    background: var(--primary-color);
+}

@@ -1,0 +1,207 @@
+/* ============================================
+   DisplayProdutosView - Tratamento Adicional
+   ============================================
+   
+   Adicione este CSS ao seu arquivo principal ou
+   importe separadamente.
+*/
+
+/* ============================================
+   CARD COM TRATAMENTO ADICIONAL
+   ============================================ */
+
+.produto-card--com-tratamento {
+    position: relative;
+    border: 2px solid #0d6efd;
+    box-shadow: 0 4px 12px rgba(13, 110, 253, 0.15);
+}
+
+.produto-card--com-tratamento::before {
+    content: "Lente + Tratamento";
+    position: absolute;
+    top: -12px;
+    left: 12px;
+    background: linear-gradient(135deg, #0d6efd 0%, #0a58ca 100%);
+    color: white;
+    padding: 2px 10px;
+    border-radius: 4px;
+    font-size: 0.7rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    box-shadow: 0 2px 4px rgba(13, 110, 253, 0.3);
+}
+
+/* ============================================
+   LINHA DE TRATAMENTO ADICIONAL
+   ============================================ */
+
+.tratamento-adicional {
+    background: linear-gradient(135deg, #e7f3ff 0%, #f0f7ff 100%);
+    border-left: 3px solid #0d6efd;
+    padding: 8px 12px;
+    margin: 8px 0;
+    border-radius: 0 6px 6px 0;
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 6px;
+    font-size: 0.85rem;
+}
+
+.tratamento-label {
+    color: #6c757d;
+    font-weight: 500;
+}
+
+.tratamento-nome {
+    color: #0d6efd;
+    font-weight: 600;
+}
+
+.tratamento-valor {
+    color: #198754;
+    font-weight: 600;
+    margin-left: auto;
+    background: rgba(25, 135, 84, 0.1);
+    padding: 2px 8px;
+    border-radius: 4px;
+}
+
+/* ============================================
+   BADGE AR ADICIONAL
+   ============================================ */
+
+.badge--ar-adicional {
+    background: linear-gradient(135deg, #0d6efd 0%, #6610f2 100%) !important;
+    color: white !important;
+    animation: pulse-badge 2s infinite;
+}
+
+@keyframes pulse-badge {
+    0%, 100% {
+        box-shadow: 0 0 0 0 rgba(13, 110, 253, 0.4);
+    }
+    50% {
+        box-shadow: 0 0 0 4px rgba(13, 110, 253, 0);
+    }
+}
+
+/* ============================================
+   PREÇOS DECOMPOSTOS
+   ============================================ */
+
+.preco--decomposto {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    width: 100%;
+}
+
+.preco__linha {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-size: 0.85rem;
+}
+
+.preco__linha--lentes,
+.preco__linha--lente {
+    color: #6c757d;
+}
+
+.preco__linha--tratamento {
+    color: #0d6efd;
+}
+
+.preco__linha--tratamento .preco__valor {
+    color: #0d6efd;
+}
+
+.preco__linha--total {
+    font-weight: 700;
+    font-size: 1rem;
+    color: #198754;
+    border-top: 1px dashed #dee2e6;
+    padding-top: 6px;
+    margin-top: 4px;
+}
+
+.preco__linha--total .preco__label {
+    color: #495057;
+}
+
+.preco__linha--total .preco__valor {
+    color: #198754;
+    font-size: 1.1rem;
+}
+
+/* ============================================
+   PREÇO NO OLHO (OD/OE)
+   ============================================ */
+
+.produto-olho__preco .preco-base {
+    display: block;
+    font-size: 0.75rem;
+    color: #6c757d;
+    text-decoration: line-through;
+}
+
+.produto-olho__preco .preco-total {
+    display: block;
+    font-size: 0.9rem;
+    font-weight: 700;
+    color: #198754;
+}
+
+/* ============================================
+   RESPONSIVO
+   ============================================ */
+
+@media (max-width: 576px) {
+    .tratamento-adicional {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+    
+    .tratamento-valor {
+        margin-left: 0;
+        margin-top: 4px;
+    }
+    
+    .preco__linha {
+        font-size: 0.8rem;
+    }
+    
+    .preco__linha--total .preco__valor {
+        font-size: 1rem;
+    }
+}
+
+/* ============================================
+   DARK MODE (se aplicável)
+   ============================================ */
+
+@media (prefers-color-scheme: dark) {
+    .produto-card--com-tratamento {
+        border-color: #4dabf7;
+    }
+    
+    .tratamento-adicional {
+        background: linear-gradient(135deg, #1a3a5c 0%, #1e3d5f 100%);
+        border-left-color: #4dabf7;
+    }
+    
+    .tratamento-label {
+        color: #adb5bd;
+    }
+    
+    .tratamento-nome {
+        color: #74c0fc;
+    }
+    
+    .tratamento-valor {
+        color: #69db7c;
+        background: rgba(105, 219, 124, 0.15);
+    }
+}

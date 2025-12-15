@@ -1,0 +1,60 @@
+/**
+ * sidebar-no-blur.css
+ * Remove o efeito de blur do backdrop das sidebars
+ */
+
+/* ========================================
+   🌑 BACKDROP SEM BLUR
+   ======================================== */
+
+/* Remove blur do backdrop direito */
+#rightBackdrop {
+    backdrop-filter: none !important;
+    -webkit-backdrop-filter: none !important;
+}
+
+/* 
+   Se quiser remover do esquerdo também, descomente:
+   
+   #leftBackdrop {
+       backdrop-filter: none !important;
+       -webkit-backdrop-filter: none !important;
+   }
+*/
+
+/* 
+   Ou remover de TODOS os backdrops:
+   
+   .sidebar-backdrop {
+       backdrop-filter: none !important;
+       -webkit-backdrop-filter: none !important;
+   }
+*/
+
+/* ========================================
+   🎨 AJUSTES OPCIONAIS
+   ======================================== */
+
+/* 
+   Se quiser deixar o backdrop mais escuro (já que não tem blur):
+   
+   #rightBackdrop {
+       background: rgba(0, 0, 0, 0.6); 
+   }
+*/
+
+/* 
+   Se quiser deixar o backdrop mais claro:
+   
+   #rightBackdrop {
+       background: rgba(0, 0, 0, 0.3);
+   }
+*/
+
+/* 
+   Se quiser remover o backdrop completamente:
+   
+   #rightBackdrop {
+       display: none !important;
+   }
+*/

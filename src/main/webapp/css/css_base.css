@@ -1,0 +1,287 @@
+/**
+ * base.css
+ * Reset CSS + Estilos base do sistema
+ */
+
+/* ========================================
+   🔄 RESET CSS
+   ======================================== */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+/* ========================================
+   📄 HTML & BODY
+   ======================================== */
+html {
+    height: -webkit-fill-available; /* Fix iOS/iPadOS */
+}
+
+body {
+    font-family: var(--font-family);
+    background: var(--gradient-bg);
+    min-height: 100vh;
+    min-height: calc(var(--vh, 1vh) * 100); /* Fix iOS */
+    min-height: -webkit-fill-available; /* Fix iOS/iPadOS */
+    overflow-x: hidden;
+    color: var(--text-primary);
+    line-height: var(--line-height-normal);
+}
+
+/* ========================================
+   🔤 TIPOGRAFIA BASE
+   ======================================== */
+h1, h2, h3, h4, h5, h6 {
+    font-weight: var(--font-weight-semibold);
+    line-height: var(--line-height-tight);
+    color: var(--text-primary);
+}
+
+h1 { font-size: var(--font-size-4xl); }
+h2 { font-size: var(--font-size-3xl); }
+h3 { font-size: var(--font-size-2xl); }
+h4 { font-size: var(--font-size-xl); }
+h5 { font-size: var(--font-size-lg); }
+h6 { font-size: var(--font-size-base); }
+
+p {
+    margin-bottom: var(--spacing-4);
+}
+
+a {
+    color: var(--primary-color);
+    text-decoration: none;
+    transition: color var(--transition-base);
+}
+
+a:hover {
+    color: var(--primary-dark);
+}
+
+/* ========================================
+   🎯 BOTÕES BASE
+   ======================================== */
+button {
+    font-family: var(--font-family);
+    cursor: pointer;
+    border: none;
+    outline: none;
+    transition: all var(--transition-base);
+}
+
+button:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+}
+
+/* ========================================
+   📝 INPUTS BASE
+   ======================================== */
+input,
+textarea,
+select {
+    font-family: var(--font-family);
+    font-size: var(--font-size-base);
+    outline: none;
+    transition: all var(--transition-base);
+}
+
+input:focus,
+textarea:focus,
+select:focus {
+    outline: none;
+}
+
+/* ========================================
+   📋 LISTAS
+   ======================================== */
+ul, ol {
+    list-style: none;
+}
+
+/* ========================================
+   🖼️ IMAGENS
+   ======================================== */
+img {
+    max-width: 100%;
+    height: auto;
+    display: block;
+}
+
+/* ========================================
+   🎭 SCROLLBAR CUSTOMIZADO
+   ======================================== */
+::-webkit-scrollbar {
+    width: 8px;
+    height: 8px;
+}
+
+::-webkit-scrollbar-track {
+    background: var(--bg-tertiary);
+}
+
+::-webkit-scrollbar-thumb {
+    background: var(--primary-color);
+    border-radius: var(--radius-md);
+}
+
+::-webkit-scrollbar-thumb:hover {
+    background: var(--primary-dark);
+}
+
+/* ========================================
+   📱 SMOOTH SCROLL (iOS)
+   ======================================== */
+* {
+    -webkit-overflow-scrolling: touch;
+}
+
+/* ========================================
+   🎨 SELECTION
+   ======================================== */
+::selection {
+    background: var(--primary-color);
+    color: white;
+}
+
+::-moz-selection {
+    background: var(--primary-color);
+    color: white;
+}
+
+/* ========================================
+   🚫 PLACEHOLDER
+   ======================================== */
+::placeholder {
+    color: var(--text-light);
+    opacity: 1;
+}
+
+:-ms-input-placeholder {
+    color: var(--text-light);
+}
+
+::-ms-input-placeholder {
+    color: var(--text-light);
+}
+
+/* ========================================
+   🎯 FOCUS VISIBLE (Acessibilidade)
+   ======================================== */
+:focus-visible {
+    outline: 2px solid var(--primary-color);
+    outline-offset: 2px;
+}
+
+button:focus-visible,
+a:focus-visible {
+    outline: 2px solid var(--primary-color);
+    outline-offset: 2px;
+}
+
+/* ========================================
+   📐 USER SELECT
+   ======================================== */
+.no-select {
+    user-select: none;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+}
+
+/* ========================================
+   🎬 ANIMAÇÕES BASE
+   ======================================== */
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+    }
+    to {
+        opacity: 1;
+    }
+}
+
+@keyframes fadeInUp {
+    from {
+        opacity: 0;
+        transform: translateY(30px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+@keyframes fadeInDown {
+    from {
+        opacity: 0;
+        transform: translateY(-30px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+@keyframes slideIn {
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+@keyframes pulse {
+    0%, 100% {
+        transform: scale(1);
+    }
+    50% {
+        transform: scale(1.1);
+    }
+}
+
+@keyframes spin {
+    to {
+        transform: rotate(360deg);
+    }
+}
+
+@keyframes shake {
+    0%, 100% { transform: translateX(0); }
+    10%, 30%, 50%, 70%, 90% { transform: translateX(-10px); }
+    20%, 40%, 60%, 80% { transform: translateX(10px); }
+}
+
+/* ========================================
+   🛠️ UTILIDADES
+   ======================================== */
+.sr-only {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    padding: 0;
+    margin: -1px;
+    overflow: hidden;
+    clip: rect(0, 0, 0, 0);
+    white-space: nowrap;
+    border-width: 0;
+}
+
+.hidden {
+    display: none !important;
+}
+
+.invisible {
+    visibility: hidden;
+}
+
+.clearfix::after {
+    content: "";
+    display: table;
+    clear: both;
+}

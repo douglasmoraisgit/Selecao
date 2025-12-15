@@ -1,0 +1,317 @@
+/**
+ * carrinho-tratamento.css
+ * Estilos para Carrinho de Compras e Seletor de Tratamentos
+ * 
+ * @author OptoFreela
+ */
+
+/* ============================================
+   CARRINHO - CONTAINER PRINCIPAL
+   ============================================ */
+
+.carrinho-container {
+    padding: 1rem;
+}
+
+.carrinho-itens {
+    max-height: 60vh;
+    overflow-y: auto;
+}
+
+.carrinho-vazio {
+    padding: 3rem 1rem;
+}
+
+.carrinho-vazio i {
+    color: #ccc;
+}
+
+/* ============================================
+   CARRINHO - ITEM
+   ============================================ */
+
+.carrinho-container .item {
+    background: #fff;
+    border-radius: 8px;
+    padding: 0.75rem;
+    transition: all 0.3s ease;
+}
+
+.carrinho-container .item:hover {
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+.carrinho-container .item hr {
+    margin: 0.5rem 0;
+    opacity: 0.2;
+}
+
+/* Item destacado (recém adicionado) */
+.item-destacado {
+    animation: highlight 2s ease;
+}
+
+@keyframes highlight {
+    0% { background-color: #d4edda; }
+    100% { background-color: #fff; }
+}
+
+/* Fade out ao remover */
+.fade-out {
+    opacity: 0;
+    transform: translateX(-20px);
+    transition: all 0.3s ease;
+}
+
+/* ============================================
+   CARRINHO - CÓDIGOS DE TRATAMENTO
+   ============================================ */
+
+.cod-tratamento {
+    font-size: 0.7rem;
+    color: #0066cc;
+}
+
+/* ============================================
+   CARRINHO - QUANTIDADE
+   ============================================ */
+
+.carrinho-container .btn-xs {
+    padding: 0.2rem 0.5rem;
+    font-size: 0.75rem;
+}
+
+.carrinho-container .btn-incrementar,
+.carrinho-container .btn-decrementar {
+    min-width: 28px;
+    height: 28px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+/* ============================================
+   CARRINHO - INPUT DE PREÇO
+   ============================================ */
+
+.input-preco {
+    transition: border-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+.input-preco:focus {
+    border-color: #0d6efd;
+    box-shadow: 0 0 0 0.2rem rgba(13, 110, 253, 0.25);
+}
+
+.input-preco.is-invalid {
+    border-color: #dc3545;
+    animation: shake 0.3s ease;
+}
+
+@keyframes shake {
+    0%, 100% { transform: translateX(0); }
+    25% { transform: translateX(-5px); }
+    75% { transform: translateX(5px); }
+}
+
+/* ============================================
+   CARRINHO - TOTAL
+   ============================================ */
+
+.carrinho-total {
+    background: #f8f9fa;
+    padding: 1rem;
+    border-radius: 8px;
+    margin-top: 1rem;
+}
+
+#total-value {
+    font-size: 1.25rem;
+    color: #28a745;
+}
+
+/* ============================================
+   TRATAMENTO SELECTOR - MODAL
+   ============================================ */
+
+#tratamentoSelectorModal .modal-header {
+    background: linear-gradient(135deg, #0d6efd, #0056b3);
+}
+
+#tratamentoSelectorModal .modal-body {
+    max-height: 60vh;
+    overflow-y: auto;
+}
+
+/* ============================================
+   TRATAMENTO - CONTEXTO
+   ============================================ */
+
+#tratamento-contexto {
+    background: #e7f3ff;
+    border: 1px solid #b8daff;
+    border-radius: 8px;
+}
+
+/* ============================================
+   TRATAMENTO - LISTA
+   ============================================ */
+
+.tratamento-lista {
+    padding: 0.5rem 0;
+}
+
+.tratamento-categoria h6 {
+    color: #6c757d;
+    font-size: 0.9rem;
+    font-weight: 600;
+}
+
+/* ============================================
+   TRATAMENTO - ITEM
+   ============================================ */
+
+.tratamento-item {
+    cursor: pointer;
+    transition: all 0.2s ease;
+    border: 2px solid transparent;
+}
+
+.tratamento-item:hover {
+    border-color: #0d6efd;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+.tratamento-item.border-primary {
+    border-color: #0d6efd !important;
+}
+
+.tratamento-item.bg-primary-subtle {
+    background-color: rgba(13, 110, 253, 0.1) !important;
+}
+
+/* Tratamento obrigatório */
+.tratamento-obrigatorio {
+    cursor: not-allowed;
+    opacity: 0.8;
+}
+
+.tratamento-obrigatorio:hover {
+    transform: none;
+    box-shadow: none;
+}
+
+/* ============================================
+   TRATAMENTO - CHECKBOX
+   ============================================ */
+
+.tratamento-item .form-check-input {
+    cursor: pointer;
+}
+
+.tratamento-item .form-check-input:checked {
+    background-color: #0d6efd;
+    border-color: #0d6efd;
+}
+
+.tratamento-item .form-check-label {
+    cursor: pointer;
+    user-select: none;
+}
+
+/* ============================================
+   TRATAMENTO - BADGE DE PREÇO
+   ============================================ */
+
+.tratamento-item .badge {
+    font-size: 0.8rem;
+    font-weight: 500;
+}
+
+/* ============================================
+   TRATAMENTO - RESUMO
+   ============================================ */
+
+#tratamento-resumo {
+    position: sticky;
+    bottom: 0;
+    background: #f8f9fa;
+}
+
+#valor-tratamentos {
+    font-weight: 600;
+    font-size: 1.1rem;
+}
+
+/* ============================================
+   MODAL DE CONFIRMAÇÃO DE EXCLUSÃO
+   ============================================ */
+
+#confirmDeleteModal .modal-content {
+    border-radius: 12px;
+}
+
+#confirmDeleteModal .btn-danger {
+    min-width: 100px;
+}
+
+/* ============================================
+   RESPONSIVE
+   ============================================ */
+
+@media (max-width: 768px) {
+    .carrinho-container .item .row > div {
+        margin-bottom: 0.5rem;
+    }
+    
+    .carrinho-container .item .row > div:last-child {
+        margin-bottom: 0;
+    }
+    
+    .tratamento-item {
+        margin-bottom: 0.5rem;
+    }
+    
+    #tratamentoSelectorModal .modal-body {
+        max-height: 50vh;
+    }
+}
+
+/* ============================================
+   TOOLTIP PERSONALIZADO
+   ============================================ */
+
+.tooltip-preco-minimo {
+    --bs-tooltip-bg: #dc3545;
+}
+
+/* ============================================
+   ANIMAÇÕES EXTRAS
+   ============================================ */
+
+.pulse {
+    animation: pulse 0.5s ease;
+}
+
+@keyframes pulse {
+    0% { transform: scale(1); }
+    50% { transform: scale(1.05); }
+    100% { transform: scale(1); }
+}
+
+/* Slide in */
+.slide-in {
+    animation: slideIn 0.3s ease;
+}
+
+@keyframes slideIn {
+    from {
+        opacity: 0;
+        transform: translateY(-10px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}

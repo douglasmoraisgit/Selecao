@@ -1,0 +1,317 @@
+/**
+ * sidebar-colors.css
+ * Cores ajustadas conforme imagem do sistema
+ */
+
+/* ========================================
+   🎨 SIDEBAR - CORES CUSTOMIZADAS
+   ======================================== */
+
+/* Container principal da sidebar */
+.sidebar {
+    background: #e8eaf0; /* Cinza claro da imagem */
+    box-shadow: 2px 0 8px rgba(0, 0, 0, 0.1);
+}
+
+/* ========================================
+   📱 SIDEBAR HEADER
+   ======================================== */
+.sidebar__header {
+    background: #5b6fd8; /* Roxo/azul da imagem */
+    color: white;
+    padding: 16px 20px;
+    border-bottom: none;
+    min-height: 60px;
+}
+
+.sidebar__title {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-size: 16px;
+    font-weight: 600;
+}
+
+.sidebar__title-icon {
+    font-size: 20px;
+}
+   
+.sidebar__toggle {
+    background: rgba(255, 255, 255, 0.15);
+    color: white;
+    border: none;
+    padding: 8px 12px;
+    border-radius: 6px;
+    font-size: 20px;
+    cursor: pointer;
+    transition: background 0.3s ease;
+}
+
+.sidebar__toggle:hover {
+    background: rgba(255, 255, 255, 0.25);
+}
+
+/* ========================================
+   🗂️ SIDEBAR MENU
+   ======================================== */
+.sidebar__menu {
+    padding: 16px 0;
+}
+
+/* ========================================
+   📋 SEÇÕES
+   ======================================== */
+.sidebar__section {
+    margin-bottom: 24px;
+}
+
+.sidebar__section-title {
+  /*  padding: 12px 20px;
+    font-size: 11px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.8px;
+    color: #5b6fd8; 
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  */  
+    padding: 12px 20px;
+            font-size: 0.85rem;
+            font-weight: 700;
+            color: #667eea;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            background: rgba(102, 126, 234, 0.1);
+            border-left: 4px solid #667eea;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+}
+
+/* ========================================
+   🎯 BADGES DAS SEÇÕES
+   ======================================== */
+.sidebar__section-badge {
+    padding: 3px 10px;
+    border-radius: 12px;
+    font-size: 10px;
+    font-weight: 700;
+    letter-spacing: 0.5px;
+    margin-left: auto;
+}
+
+/* Badge ÚNICA - Vermelho */
+.sidebar__section-badge--unica {
+    background: #ff6b6b; /* Vermelho da imagem */
+    color: white;
+}
+
+/* Badge MÚLTIPLA - Verde */
+.sidebar__section-badge--multipla {
+    background: #4CAF50; /* Verde da imagem */
+    color: white;
+}
+
+/* ========================================
+   📝 LISTA DE ITEMS
+   ======================================== */
+.sidebar__list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+/* ========================================
+   🔘 SIDEBAR ITEM
+   ======================================== */
+.sidebar__item {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 10px 20px;
+    color: #5a5a5a; /* Cinza escuro */
+    cursor: pointer;
+    transition: all 0.2s ease;
+    position: relative;
+    font-size: 14px;
+    background: transparent;
+    margin: 2px 8px;
+    border-radius: 6px;
+}
+
+/* Barra lateral de destaque (aparece ao hover e active) */
+.sidebar__item::before {
+    content: '';
+    position: absolute;
+    left: -8px;
+    top: 0;
+    bottom: 0;
+    width: 3px;
+    background: #5b6fd8;
+    transform: scaleY(0);
+    transition: transform 0.2s ease;
+    border-radius: 0 2px 2px 0;
+}
+
+/* Hover */
+.sidebar__item:hover {
+    background: rgba(91, 111, 216, 0.08); /* Roxo claro transparente */
+    color: #5b6fd8;
+}
+
+.sidebar__item:hover::before {
+    transform: scaleY(1);
+}
+
+/* Item ativo */
+.sidebar__item--active {
+    background: rgba(91, 111, 216, 0.12); /* Roxo claro mais forte */
+    color: #5b6fd8;
+    font-weight: 600;
+}
+
+.sidebar__item--active::before {
+    transform: scaleY(1);
+    
+}
+
+/* ========================================
+   🎨 ÍCONES DOS ITEMS
+   ======================================== */
+.sidebar__item-icon {
+    font-size: 18px;
+    width: 20px;
+    text-align: center;
+    flex-shrink: 0;
+}
+
+/* ========================================
+   📝 TEXTO DOS ITEMS
+   ======================================== */
+.sidebar__item-text {
+    flex: 1;
+    font-weight: 400;
+}
+
+.sidebar__item--active .sidebar__item-text {
+    font-weight: 600;
+}
+
+/* ========================================
+   🔢 BADGE NO ITEM (contador)
+   ======================================== */
+.sidebar__item-badge {
+    background: rgba(91, 111, 216, 0.15);
+    color: #5b6fd8;
+    padding: 2px 8px;
+    border-radius: 10px;
+    font-size: 11px;
+    font-weight: 700;
+    min-width: 20px;
+    text-align: center;
+}
+
+.sidebar__item--active .sidebar__item-badge {
+    background: #5b6fd8;
+    color: white;
+}
+
+/* ========================================
+   🎨 SCROLLBAR
+   ======================================== */
+.sidebar::-webkit-scrollbar {
+    width: 6px;
+}
+
+.sidebar::-webkit-scrollbar-track {
+    background: rgba(0, 0, 0, 0.05);
+}
+
+.sidebar::-webkit-scrollbar-thumb {
+    background: rgba(91, 111, 216, 0.3);
+    border-radius: 3px;
+}
+
+.sidebar::-webkit-scrollbar-thumb:hover {
+    background: rgba(91, 111, 216, 0.5);
+}
+
+/* ========================================
+   📱 MOBILE MENU TOGGLE
+   ======================================== */
+.mobile-menu-toggle {
+    position: fixed;
+    top: 16px;
+    left: 16px;
+    z-index: 2200;
+    background: #5b6fd8; /* Roxo/azul */
+    color: white;
+    border: none;
+    padding: 10px 14px;
+    border-radius: 8px;
+    cursor: pointer;
+    font-size: 22px;
+    box-shadow: 0 2px 8px rgba(91, 111, 216, 0.3);
+    transition: all 0.3s ease;
+    display: none; /* Mostra só no mobile */
+}
+
+.mobile-menu-toggle:hover {
+    background: #4a5dc5;
+    transform: scale(1.05);
+    box-shadow: 0 4px 12px rgba(91, 111, 216, 0.4);
+}
+
+/* ========================================
+   🌑 BACKDROP
+   ======================================== */
+.sidebar-backdrop {
+    background: rgba(0, 0, 0, 0.4);
+    backdrop-filter: blur(4px);
+}
+
+/* ========================================
+   📱 RESPONSIVE
+   ======================================== */
+
+/* Mobile */
+@media (max-width: 768px) {
+    .sidebar {
+        transform: translateX(-100%);
+        box-shadow: none;
+    }
+    
+    .sidebar--visible {
+        transform: translateX(0);
+        box-shadow: 4px 0 20px rgba(0, 0, 0, 0.2);
+    }
+    
+    .mobile-menu-toggle {
+        display: block;
+    }
+}
+
+/* ========================================
+   🎯 SIDEBAR DIREITA (Opções)
+   ======================================== */
+
+/* Se quiser manter a sidebar direita com mesmas cores */
+#optionsSidebar.sidebar {
+    background: #e8eaf0;
+}
+
+#optionsSidebar .sidebar__header {
+    background: #5b6fd8;
+}
+
+/* Ou se quiser sidebar direita mais clara: */
+/*
+#optionsSidebar.sidebar {
+    background: #f5f7fa;
+}
+
+#optionsSidebar .sidebar__header {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+}
+*/

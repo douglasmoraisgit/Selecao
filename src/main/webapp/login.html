@@ -1,0 +1,530 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login - OptoFreela</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, sans-serif;
+            min-height: 100vh;
+            display: flex;
+            background: linear-gradient(135deg, #1e3a5f 0%, #0f1c2e 100%);
+        }
+        
+        /* ========================================
+           LADO ESQUERDO - BRANDING
+        ======================================== */
+        
+        .login-brand {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            padding: 60px;
+            color: white;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .login-brand::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(circle, rgba(59, 130, 246, 0.1) 0%, transparent 70%);
+            animation: pulse-bg 8s ease-in-out infinite;
+        }
+        
+        @keyframes pulse-bg {
+            0%, 100% { transform: scale(1); opacity: 0.5; }
+            50% { transform: scale(1.1); opacity: 0.8; }
+        }
+        
+        .brand-content {
+            position: relative;
+            z-index: 1;
+            text-align: center;
+            max-width: 400px;
+        }
+        
+        .brand-logo {
+            font-size: 64px;
+            margin-bottom: 24px;
+        }
+        
+        .brand-title {
+            font-size: 2.5rem;
+            font-weight: 700;
+            margin-bottom: 16px;
+            background: linear-gradient(135deg, #60a5fa 0%, #3b82f6 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+        
+        .brand-subtitle {
+            font-size: 1.1rem;
+            color: rgba(255, 255, 255, 0.7);
+            line-height: 1.6;
+        }
+        
+        .brand-features {
+            margin-top: 48px;
+            text-align: left;
+        }
+        
+        .brand-feature {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            margin-bottom: 16px;
+            color: rgba(255, 255, 255, 0.8);
+            font-size: 0.95rem;
+        }
+        
+        .brand-feature-icon {
+            width: 32px;
+            height: 32px;
+            background: rgba(59, 130, 246, 0.2);
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 16px;
+        }
+        
+        /* ========================================
+           LADO DIREITO - FORMULÁRIO
+        ======================================== */
+        
+        .login-form-container {
+            width: 480px;
+            min-height: 100vh;
+            background: white;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            padding: 60px;
+            box-shadow: -10px 0 40px rgba(0, 0, 0, 0.2);
+        }
+        
+        .login-header {
+            margin-bottom: 40px;
+        }
+        
+        .login-header h1 {
+            font-size: 1.75rem;
+            color: #1f2937;
+            margin-bottom: 8px;
+        }
+        
+        .login-header p {
+            color: #6b7280;
+            font-size: 0.95rem;
+        }
+        
+        .login-form {
+            display: flex;
+            flex-direction: column;
+            gap: 24px;
+        }
+        
+        .form-group {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+        
+        .form-group label {
+            font-size: 0.9rem;
+            font-weight: 500;
+            color: #374151;
+        }
+        
+        .input-wrapper {
+            position: relative;
+        }
+        
+        .input-wrapper .input-icon {
+            position: absolute;
+            left: 16px;
+            top: 50%;
+            transform: translateY(-50%);
+            font-size: 18px;
+            color: #9ca3af;
+        }
+        
+        .form-input {
+            width: 100%;
+            padding: 14px 16px 14px 48px;
+            border: 2px solid #e5e7eb;
+            border-radius: 10px;
+            font-size: 1rem;
+            transition: all 0.2s;
+            background: #f9fafb;
+        }
+        
+        .form-input:focus {
+            outline: none;
+            border-color: #3b82f6;
+            background: white;
+            box-shadow: 0 0 0 4px rgba(59, 130, 246, 0.1);
+        }
+        
+        .form-input::placeholder {
+            color: #9ca3af;
+        }
+        
+        .form-options {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .remember-me {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            cursor: pointer;
+        }
+        
+        .remember-me input[type="checkbox"] {
+            width: 18px;
+            height: 18px;
+            accent-color: #3b82f6;
+            cursor: pointer;
+        }
+        
+        .remember-me span {
+            font-size: 0.9rem;
+            color: #6b7280;
+        }
+        
+        .forgot-password {
+            font-size: 0.9rem;
+            color: #3b82f6;
+            text-decoration: none;
+            font-weight: 500;
+        }
+        
+        .forgot-password:hover {
+            text-decoration: underline;
+        }
+        
+        .btn-login {
+            width: 100%;
+            padding: 16px;
+            border: none;
+            border-radius: 10px;
+            background: linear-gradient(135deg, #3b82f6 0%, #1d4ed8 100%);
+            color: white;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+        }
+        
+        .btn-login:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 20px rgba(59, 130, 246, 0.4);
+        }
+        
+        .btn-login:active {
+            transform: translateY(0);
+        }
+        
+        .btn-login:disabled {
+            background: #9ca3af;
+            cursor: not-allowed;
+            transform: none;
+            box-shadow: none;
+        }
+        
+        .btn-login .spinner {
+            width: 20px;
+            height: 20px;
+            border: 2px solid rgba(255, 255, 255, 0.3);
+            border-top-color: white;
+            border-radius: 50%;
+            animation: spin 0.8s linear infinite;
+            display: none;
+        }
+        
+        .btn-login.loading .spinner {
+            display: block;
+        }
+        
+        .btn-login.loading .btn-text {
+            display: none;
+        }
+        
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+        
+        /* Mensagem de erro */
+        .login-error {
+            background: #fef2f2;
+            border: 1px solid #fecaca;
+            color: #dc2626;
+            padding: 12px 16px;
+            border-radius: 8px;
+            font-size: 0.9rem;
+            display: none;
+            align-items: center;
+            gap: 8px;
+        }
+        
+        .login-error.show {
+            display: flex;
+        }
+        
+        .login-error-icon {
+            font-size: 18px;
+        }
+        
+        /* Footer */
+        .login-footer {
+            margin-top: 40px;
+            text-align: center;
+            color: #9ca3af;
+            font-size: 0.85rem;
+        }
+        
+        .login-footer a {
+            color: #3b82f6;
+            text-decoration: none;
+        }
+        
+        /* ========================================
+           SELETOR DE LOJA (opcional)
+        ======================================== */
+        
+        .form-select {
+            width: 100%;
+            padding: 14px 16px 14px 48px;
+            border: 2px solid #e5e7eb;
+            border-radius: 10px;
+            font-size: 1rem;
+            transition: all 0.2s;
+            background: #f9fafb;
+            cursor: pointer;
+            appearance: none;
+            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 24 24' stroke='%239ca3af'%3E%3Cpath stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='M19 9l-7 7-7-7'%3E%3C/path%3E%3C/svg%3E");
+            background-repeat: no-repeat;
+            background-position: right 16px center;
+            background-size: 20px;
+        }
+        
+        .form-select:focus {
+            outline: none;
+            border-color: #3b82f6;
+            background-color: white;
+            box-shadow: 0 0 0 4px rgba(59, 130, 246, 0.1);
+        }
+        
+        /* ========================================
+           RESPONSIVO
+        ======================================== */
+        
+        @media (max-width: 1024px) {
+            .login-brand {
+                display: none;
+            }
+            
+            .login-form-container {
+                width: 100%;
+                max-width: 100%;
+            }
+        }
+        
+        @media (max-width: 480px) {
+            .login-form-container {
+                padding: 40px 24px;
+            }
+            
+            .brand-title {
+                font-size: 2rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Lado Esquerdo - Branding -->
+    <div class="login-brand">
+        <div class="brand-content">
+            <div class="brand-logo">👓</div>
+            <h1 class="brand-title">OptoFreela</h1>
+            <p class="brand-subtitle">
+                Sistema completo para gestão de óticas. 
+                Controle vendas, estoque, clientes e muito mais.
+            </p>
+            
+            <div class="brand-features">
+                <div class="brand-feature">
+                    <span class="brand-feature-icon">📦</span>
+                    <span>Gestão de estoque inteligente</span>
+                </div>
+                <div class="brand-feature">
+                    <span class="brand-feature-icon">💰</span>
+                    <span>Controle financeiro completo</span>
+                </div>
+                <div class="brand-feature">
+                    <span class="brand-feature-icon">👥</span>
+                    <span>Cadastro de clientes e receitas</span>
+                </div>
+                <div class="brand-feature">
+                    <span class="brand-feature-icon">📊</span>
+                    <span>Relatórios e dashboards</span>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Lado Direito - Formulário -->
+    <div class="login-form-container">
+        <div class="login-header">
+            <h1>Bem-vindo de volta!</h1>
+            <p>Entre com suas credenciais para acessar o sistema</p>
+        </div>
+        
+        <form class="login-form" id="loginForm" action="Login" method="POST">
+            <!-- Mensagem de erro -->
+            <div class="login-error" id="loginError">
+                <span class="login-error-icon">⚠️</span>
+                <span class="login-error-message">Usuário ou senha inválidos</span>
+            </div>
+            
+            <!-- Seletor de Loja (opcional) -->
+            <div class="form-group" id="lojaGroup" style="display: none;">
+                <label for="loja">Loja</label>
+                <div class="input-wrapper">
+                    <span class="input-icon">🏪</span>
+                    <select class="form-select" id="loja" name="id_loja">
+                        <option value="">Selecione a loja...</option>
+                    </select>
+                </div>
+            </div>
+            
+            <!-- Usuário -->
+            <div class="form-group">
+                <label for="username">Usuário</label>
+                <div class="input-wrapper">
+                    <span class="input-icon">👤</span>
+                    <input 
+                        type="text" 
+                        class="form-input" 
+                        id="username" 
+                        name="username" 
+                        placeholder="Digite seu usuário"
+                        autocomplete="username"
+                        required
+                    >
+                </div>
+            </div>
+            
+            <!-- Senha -->
+            <div class="form-group">
+                <label for="senha">Senha</label>
+                <div class="input-wrapper">
+                    <span class="input-icon">🔒</span>
+                    <input 
+                        type="password" 
+                        class="form-input" 
+                        id="senha" 
+                        name="senha" 
+                        placeholder="Digite sua senha"
+                        autocomplete="current-password"
+                        required
+                    >
+                </div>
+            </div>
+            
+            <!-- Opções -->
+            <div class="form-options">
+                <label class="remember-me">
+                    <input type="checkbox" name="lembrar" id="lembrar">
+                    <span>Lembrar de mim</span>
+                </label>
+                <a href="#" class="forgot-password">Esqueci minha senha</a>
+            </div>
+            
+            <!-- Botão -->
+            <button type="submit" class="btn-login" id="btnLogin">
+                <span class="spinner"></span>
+                <span class="btn-text">Entrar</span>
+            </button>
+        </form>
+        
+        <div class="login-footer">
+            <p>© 2025 OptoFreela. Todos os direitos reservados.</p>
+        </div>
+    </div>
+    
+    <script>
+        // Verifica se há mensagem de erro na URL
+        const urlParams = new URLSearchParams(window.location.search);
+        const error = urlParams.get('error');
+        
+        if (error) {
+            const errorDiv = document.getElementById('loginError');
+            const errorMsg = document.querySelector('.login-error-message');
+            
+            switch(error) {
+                case 'invalid':
+                    errorMsg.textContent = 'Usuário ou senha inválidos';
+                    break;
+                case 'session':
+                    errorMsg.textContent = 'Sua sessão expirou. Faça login novamente.';
+                    break;
+                case 'blocked':
+                    errorMsg.textContent = 'Usuário bloqueado. Contate o administrador.';
+                    break;
+                default:
+                    errorMsg.textContent = 'Erro ao fazer login. Tente novamente.';
+            }
+            
+            errorDiv.classList.add('show');
+        }
+        
+        // Loading no botão
+        document.getElementById('loginForm').addEventListener('submit', function(e) {
+            const btn = document.getElementById('btnLogin');
+            const username = document.getElementById('username').value.trim();
+            const senha = document.getElementById('senha').value.trim();
+            
+            if (!username || !senha) {
+                e.preventDefault();
+                return;
+            }
+            
+            btn.classList.add('loading');
+            btn.disabled = true;
+        });
+        
+        // Foco no primeiro campo
+        document.getElementById('username').focus();
+        
+        // Enter no campo de senha
+        document.getElementById('senha').addEventListener('keypress', function(e) {
+            if (e.key === 'Enter') {
+                document.getElementById('loginForm').submit();
+            }
+        });
+    </script>
+</body>
+</html>

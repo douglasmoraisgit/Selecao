@@ -1,0 +1,131 @@
+/**
+ * card-coloracao.css
+ * Estilos para cards de coloração
+ * 
+ * Adicionar ao seu arquivo CSS principal ou importar separadamente
+ */
+
+/* ========================================
+   CARD DE COR - PREVIEW
+   ======================================== */
+
+.simple-card--color {
+    /* Card de cor tem layout diferente */
+}
+
+.simple-card__color-preview {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-bottom: 12px;
+}
+
+/* Imagem de cor (base64 ou URL) */
+.simple-card__color-image {
+    width: 80px;
+    height: 80px;
+    border-radius: 50%;
+    object-fit: cover;
+    border: 3px solid #fff;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.simple-card--color:hover .simple-card__color-image {
+    transform: scale(1.05);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+}
+
+.simple-card--selected .simple-card__color-image {
+    border-color: #4CAF50;
+    box-shadow: 0 0 0 3px rgba(76, 175, 80, 0.3);
+}
+
+/* Círculo de cor sólida (hex) */
+.simple-card__color-circle {
+    width: 70px;
+    height: 70px;
+    border-radius: 50%;
+    border: 3px solid #fff;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.simple-card--color:hover .simple-card__color-circle {
+    transform: scale(1.05);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+}
+
+.simple-card--selected .simple-card__color-circle {
+    border-color: #4CAF50;
+    box-shadow: 0 0 0 3px rgba(76, 175, 80, 0.3);
+}
+
+/* ========================================
+   AJUSTES PARA CARDS DE COR
+   ======================================== */
+
+.simple-card--color .simple-card__title {
+    font-size: 0.85rem;
+    margin-top: 4px;
+}
+
+.simple-card--color .simple-card__description {
+    font-size: 0.75rem;
+    color: #666;
+}
+
+/* ========================================
+   GRID RESPONSIVO PARA CORES
+   ======================================== */
+
+/* Mais colunas para cores (são menores) */
+@media (min-width: 768px) {
+    .simple-cards-grid--colors {
+        grid-template-columns: repeat(6, 1fr);
+    }
+}
+
+@media (min-width: 1024px) {
+    .simple-cards-grid--colors {
+        grid-template-columns: repeat(8, 1fr);
+    }
+}
+
+/* ========================================
+   EFEITO DEGRADÊ (para imagens degradê)
+   ======================================== */
+
+.simple-card--degrade .simple-card__color-image {
+    /* Imagens degradê já mostram o efeito */
+}
+
+/* Indicador visual de tipo */
+.simple-card--color::before {
+    content: '';
+    position: absolute;
+    top: 8px;
+    right: 8px;
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    opacity: 0;
+    transition: opacity 0.2s ease;
+}
+
+.simple-card--color:hover::before {
+    opacity: 1;
+}
+
+/* Badge de preço (opcional) */
+.simple-card__price-badge {
+    position: absolute;
+    bottom: 8px;
+    right: 8px;
+    background: #4CAF50;
+    color: white;
+    font-size: 0.7rem;
+    padding: 2px 6px;
+    border-radius: 10px;
+    font-weight: 600;
+}
