@@ -14,7 +14,8 @@
  * - 'itemAdicionado'      → Item foi adicionado { item, tipo }
  * - 'itemRemovido'        → Item foi removido { item, tipo }
  * - 'carrinhoLimpo'       → Carrinho foi limpo
- * - 'finalizarPedido'     → Usuário quer finalizar { dados }
+ * - 'irParaPagamento'     → Usuário quer ir para tela de pagamento
+ * - 'finalizarPedido'     → Usuário quer finalizar { dados } (legado)
  * - 'salvarOrcamento'     → Usuário quer salvar orçamento { dados }
  * - 'voltarParaProdutos'  → Usuário quer adicionar mais itens
  * 
@@ -92,7 +93,17 @@ export default class CarrinhoController extends EventEmitter {
             this.model.setCliente({ nome });
         });
         
-        // Finalizar pedido
+        // ✅ NOVO - Ir para tela de pagamento
+        this.view.on('irParaPagamento', () => {
+            console.log('💳 CarrinhoController: irParaPagamento recebido');
+            if (this.model.estaVazio()) {
+                alert('O carrinho está vazio!');
+                return;
+            }
+            this.emit('irParaPagamento');
+        });
+        
+        // Finalizar pedido (legado - mantido para compatibilidade)
         this.view.on('finalizar', () => {
             this.finalizarPedido();
         });
@@ -248,7 +259,7 @@ export default class CarrinhoController extends EventEmitter {
     }
 
     /**
-     * Finaliza o pedido
+     * Finaliza o pedido (legado)
      */
     async finalizarPedido() {
         if (this.model.estaVazio()) {

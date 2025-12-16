@@ -8,13 +8,14 @@ import jakarta.servlet.FilterConfig;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.ServletRequest;
 import jakarta.servlet.ServletResponse;
+import jakarta.servlet.annotation.WebFilter;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
 
 /**
  * AuthFilter.java
- * Filtro para verificar autenticação E autorização por perfil
+ * Filtro para verificar se o usuário está autenticado
  * 
  * Protege todas as páginas exceto:
  * - login.html
@@ -22,17 +23,13 @@ import jakarta.servlet.http.HttpSession;
  * - Logout (servlet)
  * - Recursos estáticos (css, js, images, fonts)
  * 
- * CONTROLE DE ACESSO POR PERFIL:
- * - Perfil "Caixa" → só acessa caixa.html
- * - Outros perfis → só acessam index.html (não podem acessar caixa.html)
- * 
  * @author OptoFreela
  */
-public class AuthFilter implements Filter {
+public class AuthFilter2 implements Filter {
 
     @Override
     public void init(FilterConfig filterConfig) throws ServletException {
-        System.out.println("✅ AuthFilter inicializado (com controle de perfil)");
+        System.out.println("✅ AuthFilter inicializado");
     }
 
     @Override
@@ -74,62 +71,15 @@ public class AuthFilter implements Filter {
         System.out.println("│ Sessão existe? " + (session != null));
         System.out.println("│ Usuário na sessão? " + isLoggedIn);
         
-        if (!isLoggedIn) {
+        if (isLoggedIn) {
+            System.out.println("│ ✅ LIBERADO - Usuário autenticado");
+            System.out.println("└─────────────────────────────────────────────────────────────────┘");
+            chain.doFilter(request, response);
+        } else {
             System.out.println("│ ❌ BLOQUEADO - Redirecionando para login");
             System.out.println("└─────────────────────────────────────────────────────────────────┘");
             httpResponse.sendRedirect(contextPath + "/login.html?error=session");
-            return;
         }
-        
-        // ✅ NOVO: Verificar autorização por perfil
-        String perfilNome = (String) session.getAttribute("perfilNome");
-        System.out.println("│ Perfil do usuário: " + (perfilNome != null ? perfilNome : "Não definido"));
-        
-        // Verificar se precisa redirecionar baseado no perfil
-        String redirecionamento = verificarAutorizacaoPorPerfil(path, perfilNome, contextPath);
-        
-        if (redirecionamento != null) {
-            System.out.println("│ 🔀 REDIRECIONANDO - Perfil não autorizado para esta página");
-            System.out.println("│ Destino: " + redirecionamento);
-            System.out.println("└─────────────────────────────────────────────────────────────────┘");
-            httpResponse.sendRedirect(redirecionamento);
-            return;
-        }
-        
-        System.out.println("│ ✅ LIBERADO - Usuário autenticado e autorizado");
-        System.out.println("└─────────────────────────────────────────────────────────────────┘");
-        chain.doFilter(request, response);
-    }
-
-    /**
-     * ✅ NOVO: Verifica se o usuário pode acessar a página baseado no perfil
-     * 
-     * @param path Caminho da requisição
-     * @param perfilNome Nome do perfil do usuário
-     * @param contextPath Contexto da aplicação
-     * @return URL de redirecionamento ou null se autorizado
-     */
-    private String verificarAutorizacaoPorPerfil(String path, String perfilNome, String contextPath) {
-        if (perfilNome == null) {
-            return null; // Sem perfil definido, deixa passar
-        }
-        
-        String perfilLower = perfilNome.toLowerCase().trim();
-        boolean isCaixa = perfilLower.equals("caixa") || 
-                          perfilLower.equals("operador de caixa") || 
-                          perfilLower.equals("operador_caixa");
-        
-        // Perfil CAIXA tentando acessar index.html ou raiz
-        if (isCaixa && (path.equals("/index.html") || path.equals("/") || path.isEmpty())) {
-            return contextPath + "/caixa.html";
-        }
-        
-        // Perfil NÃO-CAIXA tentando acessar caixa.html
-        if (!isCaixa && path.equals("/caixa.html")) {
-            return contextPath + "/index.html";
-        }
-        
-        return null; // Autorizado
     }
 
     /**
@@ -173,9 +123,9 @@ public class AuthFilter implements Filter {
             return true;
         }
         
-        // Raiz vazia (redireciona para index) - precisa de autenticação
+        // Raiz vazia (redireciona para index)
         if (path.equals("/") || path.isEmpty()) {
-            return false;
+            return false; // Precisa de autenticação
         }
         
         return false;

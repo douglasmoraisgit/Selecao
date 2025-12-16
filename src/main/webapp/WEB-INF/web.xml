@@ -1,9 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <web-app xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="https://jakarta.ee/xml/ns/jakartaee" xsi:schemaLocation="https://jakarta.ee/xml/ns/jakartaee https://jakarta.ee/xml/ns/jakartaee/web-app_6_0.xsd" version="6.0">
-  
-  <!-- ========================================
-       FILTRO DE AUTENTICAÇÃO
-  ======================================== -->
   <filter>
     <filter-name>AuthFilter</filter-name>
     <filter-class>br.com.vendas.filter.AuthFilter</filter-class>
@@ -12,10 +8,6 @@
     <filter-name>AuthFilter</filter-name>
     <url-pattern>/*</url-pattern>
   </filter-mapping>
-  
-  <!-- ========================================
-       SERVLETS
-  ======================================== -->
   <servlet>
     <description></description>
     <display-name>SelecaoLentes</display-name>
@@ -222,5 +214,45 @@
   <servlet-mapping>
     <servlet-name>UsuarioLogado</servlet-name>
     <url-pattern>/UsuarioLogado</url-pattern>
+  </servlet-mapping>
+  <servlet>
+    <description></description>
+    <display-name>SessionServlet</display-name>
+    <servlet-name>SessionServlet</servlet-name>
+    <servlet-class>br.com.vendas.servlet.SessionServlet</servlet-class>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>SessionServlet</servlet-name>
+    <url-pattern>/SessionServlet</url-pattern>
+  </servlet-mapping>
+  <servlet>
+    <description></description>
+    <display-name>CaixaRecebimentoServlet</display-name>
+    <servlet-name>CaixaRecebimentoServlet</servlet-name>
+    <servlet-class>br.com.vendas.servlet.CaixaRecebimentoServlet</servlet-class>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>CaixaRecebimentoServlet</servlet-name>
+    <url-pattern>/CaixaRecebimentoServlet</url-pattern>
+  </servlet-mapping>
+  <servlet>
+    <description></description>
+    <display-name>ReceberPagamentosServlet</display-name>
+    <servlet-name>ReceberPagamentosServlet</servlet-name>
+    <servlet-class>br.com.vendas.servlet.ReceberPagamentosServlet</servlet-class>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>ReceberPagamentosServlet</servlet-name>
+    <url-pattern>/ReceberPagamentosServlet</url-pattern>
+  </servlet-mapping>
+  <servlet>
+    <description></description>
+    <display-name>ConfirmarPagamentoServlet</display-name>
+    <servlet-name>ConfirmarPagamentoServlet</servlet-name>
+    <servlet-class>br.com.vendas.servlet.ConfirmarPagamentoServlet</servlet-class>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>ConfirmarPagamentoServlet</servlet-name>
+    <url-pattern>/ConfirmarPagamentoServlet</url-pattern>
   </servlet-mapping>
 </web-app>

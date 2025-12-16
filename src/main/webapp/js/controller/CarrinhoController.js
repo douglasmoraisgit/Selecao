@@ -181,9 +181,10 @@ export default class CarrinhoController extends EventEmitter {
         const tratamentos = [];
         const coloracao = null;
         
-        // Se tem tratamento adicional
+        // Se tem tratamento adicional (sempre anti-reflexo)
         if (info.origemTratamento === 'ADICIONAL' && info.tratamentoAdicionalNome) {
             tratamentos.push({
+                tipo: 'antireflexo',  // ✅ Tipo do tratamento
                 codigo: info.tratamentoAdicionalCodigo || 0,
                 nome: info.tratamentoAdicionalNome,
                 valor: info.tratamentoAdicionalValor || 0

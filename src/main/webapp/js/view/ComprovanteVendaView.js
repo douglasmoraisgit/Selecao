@@ -597,10 +597,48 @@ export default class ComprovanteVendaView extends EventEmitter {
             const quantidade = item.quantidade || 1;
             const valor = item.precoTotal || item.preco_total || item.subtotal || 0;
             
-            // Tratamentos
+            // ✅ CORRIGIDO: Parse tratamentos (pode vir como string JSON do banco)
             let tratamentosStr = '';
-            if (item.tratamentos && item.tratamentos.length > 0) {
-                tratamentosStr = item.tratamentos.map(t => t.nome).join(', ');
+            let coloracaoNome = '';
+            
+            if (item.tratamentos) {
+                try {
+                    // Parse se for string JSON
+                    const tratamentos = typeof item.tratamentos === 'string' 
+                        ? JSON.parse(item.tratamentos) 
+                        : item.tratamentos;
+                    
+                    if (Array.isArray(tratamentos) && tratamentos.length > 0) {
+                        // Separa tratamentos normais e coloração
+                        const tratamentosNormais = tratamentos.filter(t => t.tipo !== 'coloracao');
+                        const coloracaoItem = tratamentos.find(t => t.tipo === 'coloracao');
+                        
+                        // Monta string de tratamentos
+                        if (tratamentosNormais.length > 0) {
+                            tratamentosStr = tratamentosNormais.map(t => t.nome || t).join(', ');
+                        }
+                        
+                        // Pega coloração
+                        if (coloracaoItem) {
+                            coloracaoNome = coloracaoItem.nome || '';
+                        }
+                    }
+                } catch (e) {
+                    // Se falhar o parse, usa como string direta
+                    tratamentosStr = String(item.tratamentos);
+                }
+            }
+            
+            // ✅ Coloração pode vir também como campo separado (vendas novas antes da correção)
+            if (!coloracaoNome && item.coloracao) {
+                try {
+                    const coloracao = typeof item.coloracao === 'string'
+                        ? JSON.parse(item.coloracao)
+                        : item.coloracao;
+                    coloracaoNome = coloracao.nome || coloracao;
+                } catch (e) {
+                    coloracaoNome = String(item.coloracao);
+                }
             }
             
             return `
@@ -608,7 +646,7 @@ export default class ComprovanteVendaView extends EventEmitter {
                     <div class="item-desc">
                         <div class="nome">${quantidade}x ${item.descricao} ${olho}</div>
                         ${tratamentosStr ? `<div class="detalhe">${tratamentosStr}</div>` : ''}
-                        ${item.coloracao ? `<div class="detalhe">Coloração: ${item.coloracao.nome}</div>` : ''}
+                        ${coloracaoNome ? `<div class="detalhe">Coloração: ${coloracaoNome}</div>` : ''}
                     </div>
                     <div class="item-valor">R$ ${this.formatarValor(valor * quantidade)}</div>
                 </div>

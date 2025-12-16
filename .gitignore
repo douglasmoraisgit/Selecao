@@ -1,28 +1,19 @@
-# Eclipse
-.classpath
-.project
-.settings/
-
-# Diretórios de build/compilação
+# ===== Output / build =====
 /bin/
 /build/
+/out/
+/target/
 
-# Arquivos de log
+# ===== Logs e temporários =====
 *.log
-
-# Arquivos temporários de sistema
+*.tmp
 *~
+*.swp
 
-# Arquivos de compilação Java
-*.class
-*.jar
-*.war
-*.ear
-
-# Arquivos de configurações de IDEs (caso utilize outras IDEs além do Eclipse)
+# ===== IDEs adicionais =====
 .idea/
 .vscode/
 
-# Arquivos do sistema operacional
+# ===== SO =====
 .DS_Store
 Thumbs.db

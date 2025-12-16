@@ -529,11 +529,11 @@ export default class CarrinhoModel extends EventEmitter {
     toPayload() {
         const payload = new FormData();
         
-        // Cliente
+        // Cliente - sempre envia o nome
         if (this.cliente.id) {
             payload.append('cliente_id', this.cliente.id);
-            payload.append('cliente_nome', this.cliente.nome);
         }
+        payload.append('cliente_nome', this.cliente.nome || 'Cliente não informado');
         
         // Lentes
         this.lentes.forEach((item, index) => {
@@ -602,11 +602,11 @@ export default class CarrinhoModel extends EventEmitter {
     toURLSearchParams() {
         const params = new URLSearchParams();
         
-        // Cliente
+        // Cliente - sempre envia o nome
         if (this.cliente.id) {
             params.append('cliente_id', this.cliente.id);
-            params.append('cliente_nome', this.cliente.nome);
         }
+        params.append('cliente_nome', this.cliente.nome || 'Cliente não informado');
         
         // Lentes como JSON
         params.append('lentes', JSON.stringify(this.lentes));

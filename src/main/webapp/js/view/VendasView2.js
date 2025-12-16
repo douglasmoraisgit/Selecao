@@ -230,46 +230,8 @@ export default class VendasView extends EventEmitter {
             .vendas-content {
                 flex: 1;
                 display: grid;
-                grid-template-columns: 1fr var(--detalhes-width, 420px);
+                grid-template-columns: 1fr 380px;
                 overflow: hidden;
-                position: relative;
-            }
-            
-            /* Resizer (divisor arrastável) */
-            .vendas-resizer {
-                position: absolute;
-                top: 0;
-                bottom: 0;
-                width: 6px;
-                background: transparent;
-                cursor: col-resize;
-                z-index: 10;
-                right: var(--detalhes-width, 420px);
-                transition: background 0.2s;
-            }
-            
-            .vendas-resizer::before {
-                content: '';
-                position: absolute;
-                top: 50%;
-                left: 50%;
-                transform: translate(-50%, -50%);
-                width: 4px;
-                height: 40px;
-                background: #d1d5db;
-                border-radius: 4px;
-                transition: all 0.2s;
-            }
-            
-            .vendas-resizer:hover::before,
-            .vendas-resizer.dragging::before {
-                background: #2563eb;
-                height: 60px;
-            }
-            
-            .vendas-resizer:hover,
-            .vendas-resizer.dragging {
-                background: rgba(37, 99, 235, 0.1);
             }
             
             /* Lista de Vendas */
@@ -471,80 +433,11 @@ export default class VendasView extends EventEmitter {
             
             .detalhe-item .label {
                 color: #6b7280;
-                flex: 1;
-                min-width: 0;
             }
             
             .detalhe-item .valor {
                 font-weight: 500;
                 color: #111827;
-                white-space: nowrap;
-            }
-            
-            /* Itens com tratamentos */
-            .item-detalhe-bloco {
-                padding: 10px 0;
-                border-bottom: 1px dashed #e5e7eb;
-            }
-            
-            .item-detalhe-bloco:last-child {
-                border-bottom: none;
-            }
-            
-            .item-linha-principal {
-                display: flex;
-                justify-content: space-between;
-                align-items: flex-start;
-                gap: 8px;
-            }
-            
-            .item-desc {
-                flex: 1;
-                font-size: 0.9rem;
-                color: #374151;
-                line-height: 1.3;
-            }
-            
-            .item-valor {
-                font-weight: 600;
-                color: #059669;
-                white-space: nowrap;
-            }
-            
-            .item-extras {
-                margin-top: 6px;
-                padding-left: 8px;
-                border-left: 2px solid #e5e7eb;
-            }
-            
-            .item-extra {
-                display: flex;
-                align-items: center;
-                gap: 6px;
-                font-size: 0.8rem;
-                color: #6b7280;
-                padding: 2px 0;
-            }
-            
-            .item-extra .extra-icon {
-                font-size: 0.75rem;
-            }
-            
-            .item-extra .extra-nome {
-                flex: 1;
-            }
-            
-            .item-extra .extra-valor {
-                color: #059669;
-                font-weight: 500;
-            }
-            
-            .coloracao-preview {
-                width: 14px;
-                height: 14px;
-                border-radius: 50%;
-                border: 1px solid rgba(0,0,0,0.2);
-                flex-shrink: 0;
             }
             
             /* Totalizador */
@@ -672,10 +565,6 @@ export default class VendasView extends EventEmitter {
                     grid-template-columns: 1fr;
                 }
                 
-                .vendas-resizer {
-                    display: none;
-                }
-                
                 .vendas-detalhes {
                     position: fixed;
                     top: 0;
@@ -770,8 +659,6 @@ export default class VendasView extends EventEmitter {
                         <!-- Lista de vendas -->
                     </div>
                     
-                    <div class="vendas-resizer" id="vendasResizer"></div>
-                    
                     <div class="vendas-detalhes" id="vendasDetalhes">
                         <div class="detalhes-empty">
                             <div class="icon">📋</div>
@@ -830,79 +717,6 @@ export default class VendasView extends EventEmitter {
             this.filtros.periodo = e.target.value;
             this.emit('filtrar', { ...this.filtros });
         });
-        
-        // Resizer (divisor arrastável)
-        this.initResizer();
-    }
-    
-    /**
-     * Inicializa o resizer para ajustar largura do painel de detalhes
-     */
-    initResizer() {
-        const resizer = this.container.querySelector('#vendasResizer');
-        const content = this.container.querySelector('.vendas-content');
-        const modal = this.container.querySelector('.vendas-modal');
-        
-        if (!resizer || !content) return;
-        
-        let isResizing = false;
-        let startX = 0;
-        let startWidth = 420;
-        
-        // Carregar largura salva do localStorage
-        const savedWidth = localStorage.getItem('vendas_detalhes_width');
-        if (savedWidth) {
-            const width = parseInt(savedWidth, 10);
-            if (width >= 300 && width <= 700) {
-                content.style.setProperty('--detalhes-width', `${width}px`);
-            }
-        }
-        
-        const onMouseDown = (e) => {
-            isResizing = true;
-            startX = e.clientX;
-            const currentWidth = getComputedStyle(content).getPropertyValue('--detalhes-width');
-            startWidth = parseInt(currentWidth, 10) || 420;
-            
-            resizer.classList.add('dragging');
-            document.body.style.cursor = 'col-resize';
-            document.body.style.userSelect = 'none';
-            
-            e.preventDefault();
-        };
-        
-        const onMouseMove = (e) => {
-            if (!isResizing) return;
-            
-            const deltaX = startX - e.clientX;
-            let newWidth = startWidth + deltaX;
-            
-            // Limites mínimo e máximo
-            const modalWidth = modal.offsetWidth;
-            const minWidth = 300;
-            const maxWidth = Math.min(700, modalWidth * 0.6);
-            
-            newWidth = Math.max(minWidth, Math.min(maxWidth, newWidth));
-            
-            content.style.setProperty('--detalhes-width', `${newWidth}px`);
-        };
-        
-        const onMouseUp = () => {
-            if (!isResizing) return;
-            
-            isResizing = false;
-            resizer.classList.remove('dragging');
-            document.body.style.cursor = '';
-            document.body.style.userSelect = '';
-            
-            // Salvar largura no localStorage
-            const currentWidth = getComputedStyle(content).getPropertyValue('--detalhes-width');
-            localStorage.setItem('vendas_detalhes_width', parseInt(currentWidth, 10));
-        };
-        
-        resizer.addEventListener('mousedown', onMouseDown);
-        document.addEventListener('mousemove', onMouseMove);
-        document.addEventListener('mouseup', onMouseUp);
     }
 
     // ========================================
@@ -1132,64 +946,16 @@ export default class VendasView extends EventEmitter {
             return '<p style="color: #9ca3af; font-size: 0.9rem;">Carregando itens...</p>';
         }
         
-        return itens.map(item => {
-            // Parse tratamentos do item
-            let tratamentos = [];
-            let coloracao = null;
-            
-            if (item.tratamentos) {
-                try {
-                    // Se for string, parse JSON
-                    const parsed = typeof item.tratamentos === 'string' 
-                        ? JSON.parse(item.tratamentos) 
-                        : item.tratamentos;
-                    
-                    if (Array.isArray(parsed)) {
-                        // Separar tratamentos normais e coloração
-                        tratamentos = parsed.filter(t => t.tipo !== 'coloracao');
-                        coloracao = parsed.find(t => t.tipo === 'coloracao');
-                    }
-                } catch (e) {
-                    console.warn('Erro ao parsear tratamentos:', e);
-                }
-            }
-            
-            // Fallback para estrutura antiga (preco em vez de valor)
-            tratamentos = tratamentos.map(t => ({
-                ...t,
-                valor: t.valor || t.preco || 0
-            }));
-            
-            // Verificar se tem extras para exibir
-            const temExtras = tratamentos.length > 0 || coloracao;
-            
-            return `
-                <div class="item-detalhe-bloco">
-                    <div class="item-linha-principal">
-                        <span class="item-desc">${item.quantidade}x ${item.descricao}</span>
-                        <span class="item-valor">R$ ${this.formatarValor(item.subtotal)}</span>
-                    </div>
-                    ${temExtras ? `
-                        <div class="item-extras">
-                            ${tratamentos.map(t => `
-                                <div class="item-extra">
-                                    <span class="extra-icon">✨</span>
-                                    <span class="extra-nome">${t.nome}</span>
-                                    <span class="extra-valor">+R$ ${this.formatarValor(t.valor)}</span>
-                                </div>
-                            `).join('')}
-                            ${coloracao ? `
-                                <div class="item-extra">
-                                    <span class="coloracao-preview" style="background-color: ${coloracao.hex || '#888'}"></span>
-                                    <span class="extra-nome">${coloracao.nome}${coloracao.tipoColoracao ? ` (${coloracao.tipoColoracao})` : ''}</span>
-                                    <span class="extra-valor">+R$ ${this.formatarValor(coloracao.valor || coloracao.preco || 0)}</span>
-                                </div>
-                            ` : ''}
-                        </div>
-                    ` : ''}
-                </div>
-            `;
-        }).join('');
+        return itens.slice(0, 4).map(item => `
+            <div class="detalhe-item">
+                <span class="label">${item.quantidade}x ${item.descricao}</span>
+                <span class="valor">R$ ${this.formatarValor(item.subtotal)}</span>
+            </div>
+        `).join('') + (itens.length > 4 ? `
+            <div class="detalhe-item" style="color: #6b7280;">
+                <span class="label">+ ${itens.length - 4} mais itens...</span>
+            </div>
+        ` : '');
     }
 
     renderPagamentosResumo(pagamentos) {

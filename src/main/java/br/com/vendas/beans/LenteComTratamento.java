@@ -3,50 +3,29 @@ package br.com.vendas.beans;
 /**
  * Bean que representa uma lente com possibilidade de tratamento adicional.
  * 
+ * CORREÇÃO: Agora estende Lente para fazer parte da hierarquia Produto
+ * 
+ * Hierarquia:
+ *   Produto (abstract)
+ *      └── Lente
+ *            └── LenteComTratamento  ← CORRIGIDO!
+ * 
  * Usado quando:
  * - Lente vem de fábrica com tratamento (origemTratamento = "FABRICA")
  * - Lente BASE precisa de tratamento adicional (origemTratamento = "ADICIONAL")
  * 
  * @author OptoFreela
  */
-public class LenteComTratamento {
+public class LenteComTratamento extends Lente {
 
     // ========================================
-    // DADOS BÁSICOS DA LENTE (mesmos do LenteODeOE)
+    // CAMPOS PARA IDENTIFICAÇÃO
     // ========================================
-    private int idLente;
-    private String codProdFornecedor;
-    private String codigoWeb;
-    private String marca;
-    private String descricao;
-    private String tipo;
-    private String fotossensivel;
-    private String corFoto;
-    private Double esferico;
-    private Double cilindrico;
-    private String fabricante;
-    private String familia;
-    private String diametro;
-    private Double ir;
-    private String antiblue;
-    private String antireflexo;
-    private String arResidual;
-    private String tratamento;
-    private String material;
-    private String cor;
-    private Double adicao;
-    private Integer alturaMinima;
-    private String afinamento;
-    private String tecnicaProducao;
-    private Double precoCusto;
-    private Double precoVenda;
-    private Double precoPar;
-    private Double precoMinimo;
-    private String unidade;
-    private String tipoOlho;
+    
+    private String tipoOlho; // "OD" ou "OE" (herdado conceitualmente de LenteODeOE)
 
     // ========================================
-    // NOVOS CAMPOS PARA TRATAMENTO ADICIONAL
+    // CAMPOS PARA TRATAMENTO ADICIONAL
     // ========================================
     
     /**
@@ -65,7 +44,7 @@ public class LenteComTratamento {
     private Double tratamentoAdicionalValor;
     
     // ========================================
-    // NOVOS CAMPOS PARA COLORAÇÃO
+    // CAMPOS PARA COLORAÇÃO
     // ========================================
     
     /**
@@ -82,43 +61,79 @@ public class LenteComTratamento {
     // ========================================
     
     public LenteComTratamento() {
+        super();
         this.origemTratamento = "FABRICA"; // Padrão
+    }
+    
+    /**
+     * Construtor a partir de Lente
+     */
+    public LenteComTratamento(Lente lente) {
+        super();
+        
+        // Copiar campos de Lente
+        this.setIdLente(lente.getIdLente());
+        if (lente.getChave() != null) {
+            this.setChave(lente.getChave());
+        }
+        this.setCodProdFornecedor(lente.getCodProdFornecedor());
+        this.setCodigoWeb(lente.getCodigoWeb());
+        this.setMarca(lente.getMarca());
+        this.setDescricao(lente.getDescricao());
+        this.setTipo(lente.getTipo());
+        this.setFotossensivel(lente.getFotossensivel());
+        this.setCorFoto(lente.getCorFoto());
+        this.setEsferico(lente.getEsferico());
+        this.setCilindrico(lente.getCilindrico());
+        this.setFabricante(lente.getFabricante());
+        this.setFamilia(lente.getFamilia());
+        this.setDiametro(lente.getDiametro());
+        this.setIr(lente.getIr());
+        this.setAntiblue(lente.getAntiblue());
+        this.setAntireflexo(lente.getAntireflexo());
+        this.setArResidual(lente.getArResidual());
+        this.setTratamento(lente.getTratamento());
+        this.setMaterial(lente.getMaterial());
+        this.setCor(lente.getCor());
+        this.setAdicao(lente.getAdicao());
+        this.setAlturaMinima(lente.getAlturaMinima());
+        this.setAfinamento(lente.getAfinamento());
+        this.setTecnicaProducao(lente.getTecnicaProducao());
+        this.setPrecoCusto(lente.getPrecoCusto());
+        this.setPrecoVenda(lente.getPrecoVenda());
+        this.setPrecoPar(lente.getPrecoPar());
+        this.setPrecoMinimo(lente.getPrecoMinimo());
+        this.setUnidade(lente.getUnidade());
+        
+        // Campos adicionais de Lente
+        this.setMargem(lente.getMargem());
+        this.setDistancia(lente.getDistancia());
+        this.setLado(lente.getLado());
+        this.setVisao(lente.getVisao());
+        this.setEsfIni(lente.getEsfIni());
+        this.setEsfFim(lente.getEsfFim());
+        this.setCilIni(lente.getCilIni());
+        this.setCilFim(lente.getCilFim());
+        this.setAdiIni(lente.getAdiIni());
+        this.setAdiFim(lente.getAdiFim());
+        this.setEixo(lente.getEixo());
+        this.setAdicaoReceita(lente.getAdicaoReceita());
+        
+        // Campos de Produto
+        this.setId(lente.getId());
+        this.setEan(lente.getEan());
+        this.setNcm(lente.getNcm());
+        this.setModelo(lente.getModelo());
+        
+        this.origemTratamento = "FABRICA";
     }
     
     /**
      * Construtor a partir de LenteODeOE
      */
     public LenteComTratamento(LenteODeOE lente) {
-        this.idLente = lente.getIdLente();
-        this.codProdFornecedor = lente.getCodProdFornecedor();
-        this.codigoWeb = lente.getCodigoWeb();
-        this.marca = lente.getMarca();
-        this.descricao = lente.getDescricao();
-        this.tipo = lente.getTipo();
-        this.fotossensivel = lente.getFotossensivel();
-        this.corFoto = lente.getCorFoto();
-        this.esferico = lente.getEsferico();
-        this.cilindrico = lente.getCilindrico();
-        this.fabricante = lente.getFabricante();
-        this.familia = lente.getFamilia();
-        this.diametro = lente.getDiametro();
-        this.ir = lente.getIr();
-        this.antiblue = lente.getAntiblue();
-        this.antireflexo = lente.getAntireflexo();
-        this.arResidual = lente.getArResidual();
-        this.tratamento = lente.getTratamento();
-        this.material = lente.getMaterial();
-        this.cor = lente.getCor();
-        this.adicao = lente.getAdicao();
-        this.alturaMinima = lente.getAlturaMinima();
-        this.afinamento = lente.getAfinamento();
-        this.tecnicaProducao = lente.getTecnicaProducao();
-        this.precoCusto = lente.getPrecoCusto();
-        this.precoVenda = lente.getPrecoVenda();
-        this.precoMinimo = lente.getPrecoMinimo();
-        this.unidade = lente.getUnidade();
+        this((Lente) lente); // Chama construtor de Lente
         this.tipoOlho = lente.getTipoOlho();
-        this.origemTratamento = "FABRICA"; // Vindo de LenteODeOE, é de fábrica
     }
 
     // ========================================
@@ -145,7 +160,7 @@ public class LenteComTratamento {
      * Calcula o preço total (lente + tratamento adicional + coloração se houver)
      */
     public Double getPrecoTotal() {
-        double base = this.precoVenda != null ? this.precoVenda : 0.0;
+        double base = this.getPrecoVenda();
         
         // Adiciona tratamento adicional se houver
         if (precisaTratamentoAdicional() && this.tratamentoAdicionalValor != null) {
@@ -165,247 +180,52 @@ public class LenteComTratamento {
      */
     public String getDescricaoCompleta() {
         if (precisaTratamentoAdicional() && this.tratamentoAdicionalNome != null) {
-            return this.descricao + " + " + this.tratamentoAdicionalNome;
+            return this.getDescricao() + " + " + this.tratamentoAdicionalNome;
         }
-        return this.descricao;
+        return this.getDescricao();
+    }
+    
+    /**
+     * Retorna uma descrição dos tratamentos aplicados
+     * CORREÇÃO: Método que era chamado em CarrinhoDistinto mas não existia
+     */
+    public String getTratamentos() {
+        StringBuilder sb = new StringBuilder();
+        
+        // Tratamento de fábrica (herdado de Lente)
+        String tratFabrica = this.getTratamento();
+        if (tratFabrica != null && !tratFabrica.isEmpty()) {
+            sb.append(tratFabrica);
+        }
+        
+        // Tratamento adicional
+        if (precisaTratamentoAdicional() && this.tratamentoAdicionalNome != null) {
+            if (sb.length() > 0) sb.append(" + ");
+            sb.append(this.tratamentoAdicionalNome);
+            if (this.tratamentoAdicionalValor != null) {
+                sb.append(" (R$ ").append(String.format("%.2f", this.tratamentoAdicionalValor)).append(")");
+            }
+        }
+        
+        // Coloração
+        if (temColoracao()) {
+            if (sb.length() > 0) sb.append(" + ");
+            sb.append("Coloração: ").append(this.coloracaoNome);
+            if (this.coloracaoTipo != null) {
+                sb.append(" (").append(this.coloracaoTipo).append(")");
+            }
+            if (this.coloracaoValor != null) {
+                sb.append(" R$ ").append(String.format("%.2f", this.coloracaoValor));
+            }
+        }
+        
+        return sb.length() > 0 ? sb.toString() : "Sem tratamento";
     }
 
     // ========================================
-    // GETTERS E SETTERS - Dados Básicos
+    // GETTERS E SETTERS - TipoOlho
     // ========================================
     
-    public int getIdLente() {
-        return idLente;
-    }
-
-    public void setIdLente(int idLente) {
-        this.idLente = idLente;
-    }
-
-    public String getCodProdFornecedor() {
-        return codProdFornecedor;
-    }
-
-    public void setCodProdFornecedor(String codProdFornecedor) {
-        this.codProdFornecedor = codProdFornecedor;
-    }
-
-    public String getCodigoWeb() {
-        return codigoWeb;
-    }
-
-    public void setCodigoWeb(String codigoWeb) {
-        this.codigoWeb = codigoWeb;
-    }
-
-    public String getMarca() {
-        return marca;
-    }
-
-    public void setMarca(String marca) {
-        this.marca = marca;
-    }
-
-    public String getDescricao() {
-        return descricao;
-    }
-
-    public void setDescricao(String descricao) {
-        this.descricao = descricao;
-    }
-
-    public String getTipo() {
-        return tipo;
-    }
-
-    public void setTipo(String tipo) {
-        this.tipo = tipo;
-    }
-
-    public String getFotossensivel() {
-        return fotossensivel;
-    }
-
-    public void setFotossensivel(String fotossensivel) {
-        this.fotossensivel = fotossensivel;
-    }
-
-    public String getCorFoto() {
-        return corFoto;
-    }
-
-    public void setCorFoto(String corFoto) {
-        this.corFoto = corFoto;
-    }
-
-    public Double getEsferico() {
-        return esferico;
-    }
-
-    public void setEsferico(Double esferico) {
-        this.esferico = esferico;
-    }
-
-    public Double getCilindrico() {
-        return cilindrico;
-    }
-
-    public void setCilindrico(Double cilindrico) {
-        this.cilindrico = cilindrico;
-    }
-
-    public String getFabricante() {
-        return fabricante;
-    }
-
-    public void setFabricante(String fabricante) {
-        this.fabricante = fabricante;
-    }
-
-    public String getFamilia() {
-        return familia;
-    }
-
-    public void setFamilia(String familia) {
-        this.familia = familia;
-    }
-
-    public String getDiametro() {
-        return diametro;
-    }
-
-    public void setDiametro(String diametro) {
-        this.diametro = diametro;
-    }
-
-    public Double getIr() {
-        return ir;
-    }
-
-    public void setIr(Double ir) {
-        this.ir = ir;
-    }
-
-    public String getAntiblue() {
-        return antiblue;
-    }
-
-    public void setAntiblue(String antiblue) {
-        this.antiblue = antiblue;
-    }
-
-    public String getAntireflexo() {
-        return antireflexo;
-    }
-
-    public void setAntireflexo(String antireflexo) {
-        this.antireflexo = antireflexo;
-    }
-
-    public String getArResidual() {
-        return arResidual;
-    }
-
-    public void setArResidual(String arResidual) {
-        this.arResidual = arResidual;
-    }
-
-    public String getTratamento() {
-        return tratamento;
-    }
-
-    public void setTratamento(String tratamento) {
-        this.tratamento = tratamento;
-    }
-
-    public String getMaterial() {
-        return material;
-    }
-
-    public void setMaterial(String material) {
-        this.material = material;
-    }
-
-    public String getCor() {
-        return cor;
-    }
-
-    public void setCor(String cor) {
-        this.cor = cor;
-    }
-
-    public Double getAdicao() {
-        return adicao;
-    }
-
-    public void setAdicao(Double adicao) {
-        this.adicao = adicao;
-    }
-
-    public Integer getAlturaMinima() {
-        return alturaMinima;
-    }
-
-    public void setAlturaMinima(Integer alturaMinima) {
-        this.alturaMinima = alturaMinima;
-    }
-
-    public String getAfinamento() {
-        return afinamento;
-    }
-
-    public void setAfinamento(String afinamento) {
-        this.afinamento = afinamento;
-    }
-
-    public String getTecnicaProducao() {
-        return tecnicaProducao;
-    }
-
-    public void setTecnicaProducao(String tecnicaProducao) {
-        this.tecnicaProducao = tecnicaProducao;
-    }
-
-    public Double getPrecoCusto() {
-        return precoCusto;
-    }
-
-    public void setPrecoCusto(Double precoCusto) {
-        this.precoCusto = precoCusto;
-    }
-
-    public Double getPrecoVenda() {
-        return precoVenda;
-    }
-
-    public void setPrecoVenda(Double precoVenda) {
-        this.precoVenda = precoVenda;
-    }
-
-    public Double getPrecoPar() {
-        return precoPar;
-    }
-
-    public void setPrecoPar(Double precoPar) {
-        this.precoPar = precoPar;
-    }
-
-    public Double getPrecoMinimo() {
-        return precoMinimo;
-    }
-
-    public void setPrecoMinimo(Double precoMinimo) {
-        this.precoMinimo = precoMinimo;
-    }
-
-    public String getUnidade() {
-        return unidade;
-    }
-
-    public void setUnidade(String unidade) {
-        this.unidade = unidade;
-    }
-
     public String getTipoOlho() {
         return tipoOlho;
     }
@@ -497,12 +317,13 @@ public class LenteComTratamento {
     @Override
     public String toString() {
         return "LenteComTratamento{" +
-                "marca='" + marca + '\'' +
-                ", familia='" + familia + '\'' +
+                "marca='" + getMarca() + '\'' +
+                ", familia='" + getFamilia() + '\'' +
+                ", tipoOlho='" + tipoOlho + '\'' +
                 ", origemTratamento='" + origemTratamento + '\'' +
                 ", tratamentoAdicionalNome='" + tratamentoAdicionalNome + '\'' +
                 ", coloracaoNome='" + coloracaoNome + '\'' +
-                ", precoVenda=" + precoVenda +
+                ", precoVenda=" + getPrecoVenda() +
                 ", precoTotal=" + getPrecoTotal() +
                 '}';
     }

@@ -31,6 +31,7 @@
  *   precoUnitario: number,         // Preço base da lente
  *   precoTotal: number,            // Preço com tratamentos
  *   tratamentos: [{                // Array de tratamentos aplicados
+ *     tipo: string,                // 'antireflexo', 'fotossensivel', etc.
  *     codigo: number,
  *     nome: string,
  *     codigoFornecedor: string,
@@ -223,6 +224,7 @@ export default class CarrinhoModel extends EventEmitter {
             precoUnitario: precoBase,
             precoTotal: precoTotal,
             tratamentos: tratamentos.map(t => ({
+                tipo: t.tipo || 'antireflexo',  // ✅ Tipo do tratamento
                 codigo: t.codigo,
                 nome: t.nome,
                 codigoFornecedor: t.codigoFornecedor || t.codigo_fornecedor,

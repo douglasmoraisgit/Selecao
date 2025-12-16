@@ -40,12 +40,12 @@ import jakarta.servlet.http.HttpSession;
  * 
  * @author OptoFreela
  */
-public class SalvarVenda extends HttpServlet {
+public class SalvarVenda2 extends HttpServlet {
     private static final long serialVersionUID = 1L;
     
     private Gson gson = GsonUtils.getGson();
 
-    public SalvarVenda() {
+    public SalvarVenda2() {
         super();
     }
 
@@ -242,46 +242,29 @@ public class SalvarVenda extends HttpServlet {
                 
                 System.out.println("✅ " + itens.size() + " itens inseridos");
                 
-                // 5. Inserir pagamentos na tabela: venda_pagamentos
+                // 5. Inserir pagamentos
                 String sqlPagamento = 
                     "INSERT INTO venda_pagamentos (id_venda, forma_pagamento, valor, parcelas, " +
-                    "valor_parcela, bandeira, id_empresa_convenio, id_funcionario_convenio, " +
-                    "numero_autorizacao, status, observacoes) " +
-                    "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, 'PENDENTE', ?)";
+                    "bandeira, id_empresa_convenio, numero_autorizacao, status) " +
+                    "VALUES (?, ?, ?, ?, ?, ?, ?, 'PENDENTE')";
                 
                 try (PreparedStatement stmt = conn.prepareStatement(sqlPagamento)) {
                     for (JsonElement elem : pagamentos) {
                         JsonObject pag = elem.getAsJsonObject();
                         
-                        String forma = getStringOrNull(pag, "forma");
-                        double valor = pag.has("valor") ? pag.get("valor").getAsDouble() : 0;
-                        int parcelas = pag.has("parcelas") ? pag.get("parcelas").getAsInt() : 1;
-                        double valorParcela = parcelas > 0 ? valor / parcelas : valor;
-                        String bandeira = getStringOrNull(pag, "bandeira");
-                        String observacao = montarObservacaoPagamento(forma, bandeira, parcelas);
+                        stmt.setLong(1, vendaId);
+                        stmt.setString(2, getStringOrNull(pag, "forma"));
+                        stmt.setDouble(3, pag.has("valor") ? pag.get("valor").getAsDouble() : 0);
+                        stmt.setInt(4, pag.has("parcelas") ? pag.get("parcelas").getAsInt() : 1);
+                        stmt.setString(5, getStringOrNull(pag, "bandeira"));
                         
-                        stmt.setLong(1, vendaId);  // id_venda = vendas.id (auto-increment)
-                        stmt.setString(2, forma);   // forma_pagamento
-                        stmt.setDouble(3, valor);
-                        stmt.setInt(4, parcelas);
-                        stmt.setDouble(5, valorParcela);
-                        stmt.setString(6, bandeira);
-                        
-                        // Convênio
                         if (pag.has("convenio_id") && !pag.get("convenio_id").isJsonNull()) {
-                            stmt.setLong(7, pag.get("convenio_id").getAsLong());
+                            stmt.setLong(6, pag.get("convenio_id").getAsLong());
                         } else {
-                            stmt.setNull(7, Types.BIGINT);
+                            stmt.setNull(6, Types.BIGINT);
                         }
                         
-                        if (pag.has("funcionario_convenio_id") && !pag.get("funcionario_convenio_id").isJsonNull()) {
-                            stmt.setLong(8, pag.get("funcionario_convenio_id").getAsLong());
-                        } else {
-                            stmt.setNull(8, Types.BIGINT);
-                        }
-                        
-                        stmt.setString(9, getStringOrNull(pag, "autorizacao"));
-                        stmt.setString(10, observacao);
+                        stmt.setString(7, getStringOrNull(pag, "autorizacao"));
                         
                         stmt.addBatch();
                     }
@@ -416,23 +399,5 @@ public class SalvarVenda extends HttpServlet {
         }
         
         return gson.toJson(resultado);
-    }
-    
-    /**
-     * ✅ Monta observação do pagamento
-     */
-    private String montarObservacaoPagamento(String forma, String bandeira, int parcelas) {
-        StringBuilder obs = new StringBuilder();
-        
-        if (bandeira != null && !bandeira.isEmpty()) {
-            obs.append(bandeira);
-        }
-        
-        if (parcelas > 1) {
-            if (obs.length() > 0) obs.append(" - ");
-            obs.append(parcelas).append("x");
-        }
-        
-        return obs.length() > 0 ? obs.toString() : null;
     }
 }
