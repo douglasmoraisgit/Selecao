@@ -312,14 +312,9 @@ export class CaixaModel extends EventEmitter {
     // UTILITÁRIOS
     // ===========================================
     
-  // DEPOIS (correto - usa data local)
-_getToday() {
-    const hoje = new Date();
-    const ano = hoje.getFullYear();
-    const mes = String(hoje.getMonth() + 1).padStart(2, '0');
-    const dia = String(hoje.getDate()).padStart(2, '0');
-    return `${ano}-${mes}-${dia}`;
-}
+    _getToday() {
+        return new Date().toISOString().split('T')[0];
+    }
     
     _formatHora(dataString) {
         if (!dataString) return '';

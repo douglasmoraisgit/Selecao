@@ -20,6 +20,9 @@ export class CaixaView extends EventEmitter {
         this.container = null;
         this.elements = {};
         
+        // Aba atual (pendentes ou recebidas)
+        this._currentTab = 'pendentes';
+        
         // Bind dos métodos
         this._onVendaClick = this._onVendaClick.bind(this);
         this._onAprovarPagamento = this._onAprovarPagamento.bind(this);
@@ -169,25 +172,47 @@ export class CaixaView extends EventEmitter {
                 
                 <!-- Lista de Vendas -->
                 <section class="caixa-vendas">
-                    <div class="vendas-header">
-                        <h2>📋 Vendas Aguardando Recebimento</h2>
-                        <button id="btn-atualizar" class="btn-refresh" title="Atualizar lista">
-                            🔄 Atualizar
-                        </button>
+                    <!-- Abas estilo fichário -->
+                    <div class="fichario">
+                        <div class="fichario-tabs">
+                            <button id="tab-pendentes" class="fichario-tab active" data-tab="pendentes">
+                                <span class="fichario-icon">🕐</span>
+                                <span class="fichario-titulo">Vendas Pendentes</span>
+                                <span id="tab-pendentes-count" class="fichario-badge">0</span>
+                            </button>
+                            <button id="tab-recebidas" class="fichario-tab" data-tab="recebidas">
+                                <span class="fichario-icon">✅</span>
+                                <span class="fichario-titulo">Vendas Aprovadas</span>
+                                <span id="tab-recebidas-count" class="fichario-badge badge-success">0</span>
+                            </button>
+                        </div>
+                        <div class="fichario-actions">
+                            <button id="btn-atualizar" class="btn-refresh" title="Atualizar lista">
+                                🔄 Atualizar
+                            </button>
+                        </div>
                     </div>
                     
-                    <div id="vendas-container" class="vendas-container">
+                    <!-- Conteúdo do fichário -->
+                    <div id="vendas-container" class="vendas-container fichario-conteudo">
                         <!-- Loading -->
                         <div id="vendas-loading" class="vendas-loading" style="display: none;">
                             <div class="loading-spinner"></div>
                             <span>Carregando vendas...</span>
                         </div>
                         
-                        <!-- Empty State -->
+                        <!-- Empty State Pendentes -->
                         <div id="vendas-empty" class="vendas-empty" style="display: none;">
                             <div class="empty-icon">🎉</div>
                             <h3>Nenhuma venda pendente</h3>
                             <p>Todas as vendas do dia já foram recebidas!</p>
+                        </div>
+                        
+                        <!-- Empty State Recebidas -->
+                        <div id="vendas-empty-recebidas" class="vendas-empty" style="display: none;">
+                            <div class="empty-icon">📭</div>
+                            <h3>Nenhuma venda recebida</h3>
+                            <p>Ainda não há vendas recebidas hoje.</p>
                         </div>
                         
                         <!-- Lista -->
@@ -277,6 +302,24 @@ export class CaixaView extends EventEmitter {
         const btnAtualizar = document.getElementById('btn-atualizar');
         if (btnAtualizar) {
             btnAtualizar.addEventListener('click', () => this.emit('refresh'));
+        }
+        
+        // Abas de Pendentes/Recebidas
+        const tabPendentes = document.getElementById('tab-pendentes');
+        const tabRecebidas = document.getElementById('tab-recebidas');
+        
+        if (tabPendentes) {
+            tabPendentes.addEventListener('click', () => {
+                this._setActiveTab('pendentes');
+                this.emit('tabChanged', 'pendentes');
+            });
+        }
+        
+        if (tabRecebidas) {
+            tabRecebidas.addEventListener('click', () => {
+                this._setActiveTab('recebidas');
+                this.emit('tabChanged', 'recebidas');
+            });
         }
         
         // Fechar modal
@@ -382,6 +425,47 @@ export class CaixaView extends EventEmitter {
         }
     }
     
+    /**
+     * Define a aba ativa (pendentes ou recebidas)
+     */
+    _setActiveTab(tab) {
+        const tabPendentes = document.getElementById('tab-pendentes');
+        const tabRecebidas = document.getElementById('tab-recebidas');
+        const emptyPendentes = document.getElementById('vendas-empty');
+        const emptyRecebidas = document.getElementById('vendas-empty-recebidas');
+        
+        if (tab === 'pendentes') {
+            tabPendentes?.classList.add('active');
+            tabRecebidas?.classList.remove('active');
+            if (emptyRecebidas) emptyRecebidas.style.display = 'none';
+        } else {
+            tabRecebidas?.classList.add('active');
+            tabPendentes?.classList.remove('active');
+            if (emptyPendentes) emptyPendentes.style.display = 'none';
+        }
+        
+        // Guardar aba atual
+        this._currentTab = tab;
+    }
+    
+    /**
+     * Retorna a aba atual
+     */
+    getCurrentTab() {
+        return this._currentTab || 'pendentes';
+    }
+    
+    /**
+     * Atualiza os contadores das abas
+     */
+    updateTabCounts(pendentes, recebidas) {
+        const countPendentes = document.getElementById('tab-pendentes-count');
+        const countRecebidas = document.getElementById('tab-recebidas-count');
+        
+        if (countPendentes) countPendentes.textContent = pendentes || 0;
+        if (countRecebidas) countRecebidas.textContent = recebidas || 0;
+    }
+    
     updateDataAtual(data) {
         if (this.elements.dataAtual) {
             const dataFormatada = this._formatDate(data);
@@ -426,6 +510,9 @@ export class CaixaView extends EventEmitter {
         if (this.elements.vendasLoading) this.elements.vendasLoading.style.display = 'flex';
         if (this.elements.vendasLista) this.elements.vendasLista.style.display = 'none';
         if (this.elements.vendasEmpty) this.elements.vendasEmpty.style.display = 'none';
+        
+        const emptyRecebidas = document.getElementById('vendas-empty-recebidas');
+        if (emptyRecebidas) emptyRecebidas.style.display = 'none';
     }
     
     hideLoading() {
@@ -433,7 +520,18 @@ export class CaixaView extends EventEmitter {
     }
     
     showEmpty() {
-        if (this.elements.vendasEmpty) this.elements.vendasEmpty.style.display = 'flex';
+        const currentTab = this.getCurrentTab();
+        const emptyPendentes = document.getElementById('vendas-empty');
+        const emptyRecebidas = document.getElementById('vendas-empty-recebidas');
+        
+        if (currentTab === 'pendentes') {
+            if (emptyPendentes) emptyPendentes.style.display = 'flex';
+            if (emptyRecebidas) emptyRecebidas.style.display = 'none';
+        } else {
+            if (emptyRecebidas) emptyRecebidas.style.display = 'flex';
+            if (emptyPendentes) emptyPendentes.style.display = 'none';
+        }
+        
         if (this.elements.vendasLista) this.elements.vendasLista.style.display = 'none';
     }
     
@@ -445,7 +543,11 @@ export class CaixaView extends EventEmitter {
             return;
         }
         
+        // Esconder ambos empty states
         if (this.elements.vendasEmpty) this.elements.vendasEmpty.style.display = 'none';
+        const emptyRecebidas = document.getElementById('vendas-empty-recebidas');
+        if (emptyRecebidas) emptyRecebidas.style.display = 'none';
+        
         if (this.elements.vendasLista) this.elements.vendasLista.style.display = 'block';
         
         const html = vendas.map(venda => this._renderVendaCard(venda)).join('');
@@ -461,8 +563,14 @@ export class CaixaView extends EventEmitter {
     }
     
     _renderVendaCard(venda) {
-        const statusClass = venda.statusPagamento?.toLowerCase() === 'pago' ? 'status-pago' : 'status-pendente';
-        const statusText = venda.statusPagamento?.toLowerCase() === 'pago' ? 'Pago' : 'Pendente';
+        const isPago = venda.statusPagamento?.toLowerCase() === 'pago';
+        const statusClass = isPago ? 'status-pago' : 'status-pendente';
+        const statusText = isPago ? 'Pago' : 'Pendente';
+        
+        // Botão diferente para vendas pagas vs pendentes
+        const btnHtml = isPago 
+            ? `<button class="btn-detalhes">Ver Detalhes 👁️</button>`
+            : `<button class="btn-confirmar">Confirmar Recebimento →</button>`;
         
         return `
             <div class="venda-card ${statusClass}" data-id="${venda.idVenda}">
@@ -492,9 +600,7 @@ export class CaixaView extends EventEmitter {
                         <span class="valor-label">Total:</span>
                         <span class="valor-numero">${this._formatCurrency(venda.valorTotal)}</span>
                     </div>
-                    <button class="btn-confirmar">
-                        Confirmar Recebimento →
-                    </button>
+                    ${btnHtml}
                 </div>
             </div>
         `;
@@ -547,16 +653,10 @@ export class CaixaView extends EventEmitter {
         }
         
         console.log('🔄 Renderizando pagamentos:', pagamentos.length);
-        console.log('📋 Status dos pagamentos:', pagamentos.map(p => p.statusPagamento));
         
-        // Calcular progresso - considerar múltiplos valores de status aprovado
+        // Calcular progresso
         const total = pagamentos.length;
-        const aprovados = pagamentos.filter(p => {
-            const status = (p.statusPagamento || '').toLowerCase();
-            return status === 'aprovado' || status === 'confirmado';
-        }).length;
-        
-        console.log(`📊 Progresso inicial: ${aprovados}/${total}`);
+        const aprovados = pagamentos.filter(p => p.statusPagamento?.toLowerCase() === 'aprovado').length;
         
         this._updateProgress(aprovados, total);
         
@@ -595,11 +695,11 @@ export class CaixaView extends EventEmitter {
     }
     
     _renderPagamentoCard(pagamento, index) {
-        // Verificar se está aprovado (pode ser 'aprovado' ou 'confirmado')
-        const status = (pagamento.statusPagamento || '').toLowerCase();
-        const isAprovado = status === 'aprovado' || status === 'confirmado';
+        const isAprovado = pagamento.statusPagamento?.toLowerCase() === 'aprovado';
         const isConvenio = this._isConvenio(pagamento.tipoPagamento);
         const info = this._getInfoTipoPagamento(pagamento.tipoPagamento);
+        
+        console.log(`📦 Card ${index}: tipo=${pagamento.tipoPagamento}, aprovado=${isAprovado}, status=${pagamento.statusPagamento}`);
         
         const statusClass = isAprovado ? 'pag-aprovado' : 'pag-pendente';
         const statusBadge = isAprovado 
@@ -614,11 +714,12 @@ export class CaixaView extends EventEmitter {
             ? `<div class="pag-autorizacao">Autorização: <strong>${pagamento.numeroAutorizacao}</strong></div>`
             : '';
         
-        const btnAprovar = isAprovado 
-            ? '' 
-            : `<button class="btn-aprovar" data-index="${index}" data-convenio="${isConvenio}">
+        // SEMPRE mostrar botão para debug
+        const btnAprovar = `<button class="btn-aprovar" data-index="${index}" data-convenio="${isConvenio}">
                    ${isConvenio ? '🔐 Aprovar (Convênio)' : '✓ Aprovar Pagamento'}
                </button>`;
+        
+        console.log(`  → btnAprovar criado para index ${index}`);
         
         return `
             <div class="pagamento-card ${statusClass}" data-index="${index}">
@@ -639,7 +740,7 @@ export class CaixaView extends EventEmitter {
                     ${autorizacao}
                 </div>
                 
-                <div class="pag-footer">
+                <div class="pag-footer" style="background: #fffde7; padding: 10px;">
                     ${btnAprovar}
                 </div>
             </div>
@@ -738,24 +839,6 @@ export class CaixaView extends EventEmitter {
         // Animação de sucesso
         card.classList.add('pag-success-animation');
         setTimeout(() => card.classList.remove('pag-success-animation'), 500);
-        
-        // ✅ ATUALIZAR BARRA DE PROGRESSO
-        this._atualizarProgressoDoDOM();
-    }
-    
-    /**
-     * Atualiza o progresso contando os cards aprovados no DOM
-     */
-    _atualizarProgressoDoDOM() {
-        const modalBody = document.getElementById('modal-body');
-        if (!modalBody) return;
-        
-        const totalCards = modalBody.querySelectorAll('.pagamento-card').length;
-        const aprovadosCards = modalBody.querySelectorAll('.pagamento-card.pag-aprovado').length;
-        
-        console.log(`📊 Progresso: ${aprovadosCards}/${totalCards}`);
-        
-        this._updateProgress(aprovadosCards, totalCards);
     }
 
     // ===========================================

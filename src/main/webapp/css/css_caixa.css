@@ -351,6 +351,102 @@ body {
     margin: 0;
 }
 
+/* ========================================
+   📁 FICHÁRIO - Abas estilo pasta
+   ======================================== */
+.fichario {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-end;
+    margin-bottom: 0;
+}
+
+.fichario-tabs {
+    display: flex;
+    width: 50%;
+}
+
+.fichario-tab {
+    flex: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.75rem;
+    padding: 1rem 1.5rem;
+    border: 1px solid #e2e8f0;
+    border-bottom: none;
+    background: #f1f5f9;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    color: #64748b;
+    border-radius: 14px 14px 0 0;
+    position: relative;
+    margin-right: -1px;
+}
+
+.fichario-tab:last-child {
+    margin-right: 0;
+}
+
+.fichario-tab:hover:not(.active) {
+    background: #e2e8f0;
+    color: #475569;
+}
+
+/* Aba ativa - mesma cor do conteúdo */
+.fichario-tab.active {
+    background: #ffffff;
+    color: #1e293b;
+    z-index: 2;
+    border-color: #e2e8f0;
+}
+
+/* Esconde a borda inferior da aba ativa para conectar com o conteúdo */
+.fichario-tab.active::after {
+    content: '';
+    position: absolute;
+    bottom: -1px;
+    left: 0;
+    right: 0;
+    height: 2px;
+    background: #ffffff;
+}
+
+.fichario-icon {
+    font-size: 1.4rem;
+}
+
+.fichario-titulo {
+    font-size: 1.15rem;
+    font-weight: 700;
+    letter-spacing: -0.01em;
+}
+
+.fichario-badge {
+    background: #94a3b8;
+    color: white;
+    font-size: 0.85rem;
+    font-weight: 700;
+    padding: 0.25rem 0.7rem;
+    border-radius: 12px;
+    min-width: 26px;
+    text-align: center;
+}
+
+.fichario-tab.active .fichario-badge {
+    background: #6366f1;
+}
+
+.fichario-badge.badge-success {
+    background: #10b981;
+}
+
+.fichario-actions {
+    display: flex;
+    align-items: flex-end;
+    padding-bottom: 0.75rem;
+}
+
 .btn-refresh {
     background: var(--bg-primary, #ffffff);
     border: 1px solid var(--border-color, #e2e8f0);
@@ -369,10 +465,18 @@ body {
 }
 
 .vendas-container {
-    background: var(--bg-primary, #ffffff);
-    border-radius: var(--radius-lg, 12px);
-    box-shadow: var(--shadow-md, 0 4px 6px -1px rgba(0, 0, 0, 0.1));
+    background: #ffffff;
+    border-radius: 12px;
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
     min-height: 300px;
+}
+
+/* Quando dentro do fichário, conecta com a aba */
+.vendas-container.fichario-conteudo {
+    border-radius: 0 12px 12px 12px !important;
+    box-shadow: 0 4px 12px -2px rgba(0, 0, 0, 0.08);
+    border: 1px solid #e2e8f0;
+    border-top: none;
 }
 
 /* Estados: Loading e Empty */
@@ -545,6 +649,23 @@ body {
 .btn-confirmar:hover {
     transform: scale(1.02);
     box-shadow: 0 4px 12px rgba(99, 102, 241, 0.4);
+}
+
+.btn-detalhes {
+    background: #f0fdf4;
+    color: #059669;
+    border: 1px solid #10b981;
+    padding: 0.6rem 1.25rem;
+    border-radius: 8px;
+    font-weight: 600;
+    font-size: 0.875rem;
+    cursor: pointer;
+    transition: all 0.2s;
+}
+
+.btn-detalhes:hover {
+    background: #10b981;
+    color: white;
 }
 
 /* ========================================

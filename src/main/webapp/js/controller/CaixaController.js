@@ -26,6 +26,9 @@ export class CaixaController extends EventEmitter {
         // Dados temporários para operações em andamento
         this._vendaEmProcessamento = null;
         this._pagamentosEmProcessamento = [];
+        
+        // Aba atual (pendentes ou recebidas)
+        this._currentTab = 'pendentes';
     }
 
     // ===========================================
@@ -180,6 +183,13 @@ export class CaixaController extends EventEmitter {
             this._pagamentosEmProcessamento = [];
             this.model.limparSelecao();
         });
+        
+        // Mudança de aba
+        this.view.on('tabChanged', async (tab) => {
+            console.log(`📑 Aba alterada para: ${tab}`);
+            this._currentTab = tab;
+            await this.carregarVendas();
+        });
     }
     
     _updateUI() {
@@ -195,26 +205,43 @@ export class CaixaController extends EventEmitter {
     // ===========================================
     
     /**
-     * Carrega as vendas pendentes de recebimento
+     * Carrega as vendas de acordo com a aba selecionada
      */
     async carregarVendas() {
         const data = this.model.getDataSelecionada();
         const idLoja = this.model.state.idLoja || 1;
+        const tab = this._currentTab || 'pendentes';
         
         this.view.showLoading();
         
         try {
             const vendas = await this.service.buscarVendasPendentes(data, idLoja);
             
-            // Filtrar apenas vendas com status pendente
+            // Separar vendas pendentes e recebidas
             const vendasPendentes = vendas.filter(v => {
                 const status = (v.statusPagamento || v.status_pagamento || '').toLowerCase();
                 return status !== 'pago' && status !== 'aprovado';
             });
             
-            this.model.setVendasPendentes(vendasPendentes);
+            const vendasRecebidas = vendas.filter(v => {
+                const status = (v.statusPagamento || v.status_pagamento || '').toLowerCase();
+                return status === 'pago' || status === 'aprovado';
+            });
             
-            console.log(`📋 ${vendasPendentes.length} vendas pendentes carregadas`);
+            // Atualizar contadores das abas
+            this.view.updateTabCounts(vendasPendentes.length, vendasRecebidas.length);
+            
+            // Mostrar vendas conforme aba selecionada
+            let vendasFiltradas;
+            if (tab === 'pendentes') {
+                vendasFiltradas = vendasPendentes;
+                console.log(`📋 ${vendasFiltradas.length} vendas pendentes carregadas`);
+            } else {
+                vendasFiltradas = vendasRecebidas;
+                console.log(`✅ ${vendasFiltradas.length} vendas recebidas carregadas`);
+            }
+            
+            this.model.setVendasPendentes(vendasFiltradas);
             
         } catch (error) {
             console.error('❌ Erro ao carregar vendas:', error);
